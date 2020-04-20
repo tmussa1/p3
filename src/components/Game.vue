@@ -31,7 +31,8 @@
         </div>
         <div v-if="showSuccess" id="success-alerter">
           <div :class="alertSuccess" role="alert">
-            Congratulations, your response was correct! Click play again or
+            Congratulations, your response was correct! Click
+            <span id="word-ans">Play Again</span> or
             choose a different category
           </div>
         </div>
@@ -41,16 +42,17 @@
             <span id="word-ans">3</span>times. The correct
             answer is
             <span id="word-ans">{{ randomWord }}</span>
-            Click play again to continue playing
+            Click
+            <span id="word-ans">Play Again</span> to continue playing
           </div>
         </div>
         <b-form-input v-model="answer" placeholder="Enter your answer" class="col-md-4"></b-form-input>
         <b-button variant="primary" id="sub-button" @click="submitAnswer">Submit Answer</b-button>
         <div class="row">
-          <b-button variant="danger" class="again-button" @click="replayGame">Play again</b-button>
+          <b-button variant="danger" class="again-button" @click="replayGame">Play Again</b-button>
           <div class="spacer"></div>
           <router-link to="/" exact>
-            <b-button variant="success" class="diff-button">Pick a different category</b-button>
+            <b-button variant="success" class="diff-button">Pick a Different Category</b-button>
           </router-link>
         </div>
       </div>
