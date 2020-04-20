@@ -1,43 +1,57 @@
 <template>
   <div>
-    <b-card
-      title="Name a word fitting the descriptions below"
-      body-class="text-center"
-      header-tag="nav"
-      class="card-top"
-    >
-      <b-card-text v-if="!hintone && !hinttwo && !hintthree" class="hints"
-        >Sorry there is no hint available for the selected word
-        <b-button variant="danger" id="go-back" @click="replayGame">
-          <div class="spacer"></div>
-          <router-link to="/">Try again</router-link>
-        </b-button>
+    <h3>Category - {{ category }}</h3>
+    <b-card title="Name a word for" body-class="text-center" header-tag="nav" class="card-top">
+      <b-card-text v-if="!hintone && !hinttwo && !hintthree" class="hints">
+        Sorry, there is no defintion available for the selected word or category
+        <router-link to="/">
+          <b-button variant="danger" id="go-back">
+            <div class="spacer"></div>Try a different category
+          </b-button>
+        </router-link>
       </b-card-text>
 
-      <b-card-text v-if="hintone" class="hints"
-        >Hint - {{ hintone }}</b-card-text
-      >
-      <b-card-text v-if="hinttwo" class="hints"
-        >Hint - {{ hinttwo }}</b-card-text
-      >
-      <b-card-text v-if="hintthree" class="hints"
-        >Hint - {{ hintthree }}</b-card-text
-      >
+      <b-card-text v-if="hintone" class="hints">
+        <span>- {{ hintone }}</span>
+      </b-card-text>
+      <b-card-text v-if="hinttwo" class="hints">
+        <span>- {{ hinttwo }}</span>
+      </b-card-text>
+      <b-card-text v-if="hintthree" class="hints">
+        <span>- {{ hintthree }}</span>
+      </b-card-text>
 
       <div v-if="hintone || hinttwo || hintthree">
-        <b-form-input
-          v-model="text"
-          placeholder="Enter your answer"
-          class="col-md-4"
-        ></b-form-input>
+        <div v-if="showFailure" id="fail-alerter">
+          <div :class="alertFailure" role="alert">
+            Incorrect answer. You have
+            <span id="word-ans">{{ attemptLeft }}</span>more attempts and the
+            correct answer will be displayed
+          </div>
+        </div>
+        <div v-if="showSuccess" id="success-alerter">
+          <div :class="alertSuccess" role="alert">
+            Congratulations, your response was correct! Click play again or
+            choose a different category
+          </div>
+        </div>
+        <div v-if="countBiggerThanThree" id="answer-alerter">
+          <div :class="alertAnswer" role="alert">
+            You have attempted
+            <span id="word-ans">3</span>times. The correct
+            answer is
+            <span id="word-ans">{{ randomWord }}</span>
+            Click play again to continue playing
+          </div>
+        </div>
+        <b-form-input v-model="answer" placeholder="Enter your answer" class="col-md-4"></b-form-input>
+        <b-button variant="primary" id="sub-button" @click="submitAnswer">Submit Answer</b-button>
         <div class="row">
-          <b-button variant="success" id="first-button" @click="replayGame"
-            >Play again</b-button
-          >
+          <b-button variant="danger" class="again-button" @click="replayGame">Play again</b-button>
           <div class="spacer"></div>
-          <b-button variant="danger" id="go-back">
-            <router-link to="/">Select a different category</router-link>
-          </b-button>
+          <router-link to="/" exact>
+            <b-button variant="success" class="diff-button">Pick a different category</b-button>
+          </router-link>
         </div>
       </div>
     </b-card>
@@ -45,25 +59,37 @@
 </template>
 
 <script>
-require('dotenv').config();
-import wordData from '../../public/wordData';
-import axios from 'axios';
+require("dotenv").config();
+import wordData from "../../public/wordData";
+import axios from "axios";
 /* eslint-disable no-unused-vars */
 export default {
   data: function() {
     return {
       wordData: wordData.data,
-      randomWord: '',
+      randomWord: "",
       category: this.$route.params.category,
-      hintone: '',
-      hinttwo: '',
-      hintthree: '',
+      hintone: "",
+      hinttwo: "",
+      hintthree: "",
+      answer: "",
+      showFailure: false,
+      showSuccess: false,
+      alertFailure: "alert alert-danger col-md-8",
+      alertSuccess: "alert alert-success col-md-8",
+      alertAnswer: "alert alert-info col-md-8",
+      attemptCount: 0,
+      attemptLeft: 3,
+      countBiggerThanThree: false
     };
   },
   methods: {
     pickWord: function() {
       for (let i = 0; i < this.wordData.words.length; i++) {
-        if (this.wordData.words[i].category == this.category) {
+        if (
+          this.wordData.words[i].category.trim().toLowerCase() ==
+          this.category.trim().toLowerCase()
+        ) {
           var wordArray = this.wordData.words[i].wordList;
           let rand = Math.floor(Math.random() * wordArray.length);
           this.randomWord = wordArray[rand];
@@ -72,60 +98,112 @@ export default {
     },
     populateHint: function() {
       axios({
-        method: 'GET',
-        url: 'https://wordsapiv1.p.rapidapi.com/words/' + this.randomWord,
+        method: "GET",
+        url: "https://wordsapiv1.p.rapidapi.com/words/" + this.randomWord,
         headers: {
-          'content-type': 'application/octet-stream',
-          'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
-          'x-rapidapi-key': process.env.VUE_APP_WORD_API_KEY,
-        },
+          "content-type": "application/octet-stream",
+          "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
+          "x-rapidapi-key": process.env.VUE_APP_WORD_API_KEY
+        }
       })
-        .then((response) => {
+        .then(response => {
           console.log(response);
           console.log(this.randomWord);
           this.hintone = response.data.results[0].definition;
           this.hinttwo = response.data.results[1].definition;
           this.hintthree = response.data.results[2].definition;
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
     replayGame: function() {
+      this.showSuccess = false;
+      this.showFailure = false;
+      this.attemptCount = 0;
+      this.attemptLeft = 3;
+      this.countBiggerThanThree = false;
       this.pickWord();
       this.populateHint();
+      document.getElementById("sub-button").disabled = false;
     },
+    submitAnswer: function() {
+      if (
+        this.randomWord.trim().toLowerCase() == this.answer.trim().toLowerCase()
+      ) {
+        this.showFailure = false;
+        this.showSuccess = true;
+      } else {
+        this.showFailure = true;
+        this.showSuccess = false;
+      }
+      this.attemptCount += 1;
+      this.attemptLeft -= 1;
+      this.answer = "";
+    }
   },
   created() {
     this.pickWord();
     this.populateHint();
   },
+  watch: {
+    attemptCount: function() {
+      if (this.attemptCount >= 3) {
+        this.countBiggerThanThree = true;
+        this.showFailure = false;
+        this.showSuccess = false;
+        document.getElementById("sub-button").disabled = true;
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
 .spacer {
-  margin-left: 125px;
-}
-#first-button {
-  margin-left: 455px;
+  margin-left: 120px;
 }
 .hints {
   font-style: italic;
   font-weight: bold;
-  background: grey;
 }
-#go-back {
-  font-weight: bold;
+.hints span {
+  background: grey;
 }
 input {
   display: inline-block;
-  margin-top: 50px;
+  border: 3px grey solid;
 }
 .row {
   margin-top: 50px;
+  margin-left: 375px;
+  margin-right: 350px;
 }
 .card-top {
   margin-bottom: 50px;
+}
+h3 {
+  text-align: center;
+  font-weight: bold;
+}
+#sub-button {
+  margin-left: 20px;
+}
+.again-button {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+.diff-button {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+#fail-alerter,
+#success-alerter,
+#answer-alerter {
+  margin-left: 450px;
+  margin-right: 240px;
+}
+#word-ans {
+  font-weight: bold;
 }
 </style>
