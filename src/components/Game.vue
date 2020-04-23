@@ -1,9 +1,9 @@
 <template>
-  <div v-cloak v-if="dataLoaded">
+  <div v-cloak>
     <NavBar :showStats="true" :winCount="winCount" :lossCount="lossCount" />
     <h3>Category - {{ category }}</h3>
     <b-card title="Name a word for" body-class="text-center" header-tag="nav" class="card-top">
-      <b-card-text v-if="!hintone && !hinttwo && !hintthree" class="hints">
+      <b-card-text v-if="dataLoaded && !hintone && !hinttwo && !hintthree" class="hints">
         Sorry, there is no defintion available for the selected word or category
         <router-link to="/">
           <b-button variant="danger" id="go-back">
