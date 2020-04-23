@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div v-cloak>
+    <NavBar :showStats="true" :winCount="winCount" :lossCount="lossCount" />
     <h3>Category - {{ category }}</h3>
     <b-card
       title="Name a word for"
@@ -65,7 +66,7 @@
           <div class="spacer"></div>
           <router-link to="/" exact>
             <b-button variant="success" class="diff-button"
-              >Pick a Different Category</b-button
+              >Pick a Category from HomePage</b-button
             >
           </router-link>
         </div>
@@ -78,6 +79,8 @@
 require('dotenv').config();
 import wordData from '../../public/wordData';
 import axios from 'axios';
+import NavBar from './NavBar.vue';
+
 /* eslint-disable no-unused-vars */
 export default {
   data: function() {
@@ -93,10 +96,12 @@ export default {
       showSuccess: false,
       alertFailure: 'alert alert-danger col-md-8',
       alertSuccess: 'alert alert-success col-md-8',
-      alertAnswer: 'alert alert-info col-md-8',
+      alertAnswer: 'alert alert-secondary col-md-8',
       attemptCount: 0,
       attemptLeft: 3,
       countBiggerThanThree: false,
+      winCount: 0,
+      lossCount: 0,
     };
   },
   methods: {
@@ -123,7 +128,6 @@ export default {
         },
       })
         .then((response) => {
-          console.log(this.randomWord);
           this.hintone =
             response.data.results[0] == null
               ? ''
@@ -157,6 +161,8 @@ export default {
       ) {
         this.showFailure = false;
         this.showSuccess = true;
+        this.winCount += 1;
+        document.getElementById('sub-button').disabled = true;
       } else {
         this.showFailure = true;
         this.showSuccess = false;
@@ -172,18 +178,25 @@ export default {
   },
   watch: {
     attemptCount: function() {
-      if (this.attemptCount >= 3) {
+      if (this.attemptCount == 3) {
         this.countBiggerThanThree = true;
         this.showFailure = false;
         this.showSuccess = false;
+        this.lossCount += 1;
         document.getElementById('sub-button').disabled = true;
       }
     },
+  },
+  components: {
+    NavBar,
   },
 };
 </script>
 
 <style scoped>
+[v-cloak] {
+  display: none !important;
+}
 .spacer {
   margin-left: 120px;
 }
@@ -213,13 +226,10 @@ h3 {
 #sub-button {
   margin-left: 20px;
 }
-.again-button {
-  padding-left: 40px;
-  padding-right: 40px;
-}
+.again-button,
 .diff-button {
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 #fail-alerter,
 #success-alerter,

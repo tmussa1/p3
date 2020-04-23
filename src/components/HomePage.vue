@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NavBar :showStats="false" />
     <div class="row">
       <b-card-group deck>
         <div
@@ -21,6 +22,7 @@
 
 <script>
 import wordData from "../../public/wordData";
+import NavBar from "./NavBar.vue";
 
 /* eslint-disable no-unused-vars */
 export default {
@@ -30,7 +32,10 @@ export default {
     };
   },
   methods: {},
-  mounted() {}
+  mounted() {},
+  components: {
+    NavBar
+  }
 };
 </script>
 <style scoped>

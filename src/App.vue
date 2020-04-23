@@ -1,20 +1,17 @@
 <template>
-  <div id="app">
-    <NavBar />
+  <div id="app" v-cloak>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import NavBar from "./components/NavBar.vue";
-
 export default {
-  name: "App",
-  components: {
-    NavBar
-  }
+  name: "App"
 };
 </script>
 
 <style>
+[v-cloak] {
+  display: none;
+}
 </style>

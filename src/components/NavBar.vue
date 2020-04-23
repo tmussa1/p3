@@ -1,9 +1,19 @@
 <template>
   <div>
     <b-navbar type="dark" variant="dark">
-      <router-link to="/">
+      <router-link to="/" v-if="!showStats">
         <b-navbar-brand id="nav-home">Vocabulary Quiz</b-navbar-brand>
       </router-link>
+      <b-navbar variant="faded" type="light" v-if="showStats">
+        <router-link
+          :to="{
+            name: 'stats',
+            params: { winCount: updatedWinCount, lossCount: updatedLossCount },
+          }"
+        >
+          <b-navbar-brand>MyStats</b-navbar-brand>
+        </router-link>
+      </b-navbar>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
@@ -14,7 +24,13 @@
               placeholder="Filter categories"
               v-model="searchWord"
             ></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit" @click="searchCategory">Search</b-button>
+            <b-button
+              size="sm"
+              class="my-2 my-sm-0"
+              type="submit"
+              @click="searchCategory"
+              >Search</b-button
+            >
           </b-nav-form>
         </b-navbar-nav>
       </b-collapse>
@@ -23,26 +39,37 @@
 </template>
 
 <script>
-import wordData from "../../public/wordData";
+import wordData from '../../public/wordData';
 
 /* eslint-disable no-unused-vars */
 export default {
   data: function() {
     return {
       wordData: wordData.data,
-      searchWord: ""
+      searchWord: '',
+      updatedWinCount: 0,
+      updatedLossCount: 0,
     };
   },
   methods: {
     searchCategory: function() {
       this.$router.push({
-        path: "/"
+        path: '/',
       });
       this.$router.push({
-        path: "categories/" + this.searchWord
+        path: 'categories/' + this.searchWord,
       });
-    }
-  }
+    },
+  },
+  props: ['showStats', 'winCount', 'lossCount'],
+  watch: {
+    winCount: function() {
+      this.updatedWinCount = this.$props.winCount;
+    },
+    lossCount: function() {
+      this.updatedLossCount = this.$props.lossCount;
+    },
+  },
 };
 </script>
 
