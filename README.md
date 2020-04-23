@@ -22,7 +22,7 @@ The following references below have been used for a usccessful completion of the
 [Conditional rendering in a child component](https://stackoverflow.com/questions/41067378/watching-computed-properties)
 
 ## Notes for instructor
-Vocabulary Quiz
+### Vocabulary Quiz
 
 ##### The application is a guessing game of words based on the definitions provided. The application is integrated with third party APIs to pull defintions and the user is randomly assigned a word to play with from a list in firbase based on a category of choice. 
 
