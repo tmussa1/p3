@@ -7,6 +7,8 @@
 
 _List the "pages" of your application_
 
+As long as you log in with the same name and date of birth, your scores will be saved and you can play again at a later time. 
+
 ## SFC summary
 
 _List the SFCs of your application_
@@ -36,6 +38,11 @@ The following references below have been used for a usccessful completion of the
 [Conditional rendering in a child component](https://stackoverflow.com/questions/41067378/watching-computed-properties)
 
 [Firebase already initialized issue](https://github.com/zeit/next.js/issues/1999)
+
+[Passing props with programmatic navigation](https://stackoverflow.com/questions/45151810/passing-props-with-programmatic-navigation-vue-js)
+
+[How to update firbase collection](https://www.google.com/search?q=how+to+make+an+update+with+firbase+and+javascript&oq=how+to+make+an+update+with+firbase+and+javascript&aqs=chrome..69i57.11760j0j7&sourceid=chrome&ie=UTF-8#kpvalbx=_2fqlXo2zB8TEtQbC8YaQDg33)
+
 
 ## Notes for instructor
 

@@ -1,13 +1,20 @@
 <template>
   <div v-cloak>
-    <NavBar :showLogIn="false" :winCount="winCount" :lossCount="lossCount" />
+    <NavBar :winCount="winCount" :lossCount="lossCount" />
     <h3>Category - {{ category }}</h3>
-    <b-card title="Name a word for" body-class="text-center" header-tag="nav" class="card-top">
+    <b-card
+      title="Name a word for"
+      body-class="text-center"
+      header-tag="nav"
+      class="card-top"
+    >
       <b-card-text v-if="noData && dataLoaded" class="hints">
         Sorry, there is no defintion available for the selected word or category
         <div class="spacer"></div>
-        <router-link to="/">
-          <b-button variant="danger" id="go-back">Try a different category</b-button>
+        <router-link to="/categories">
+          <b-button variant="danger" id="go-back"
+            >Try a different category</b-button
+          >
         </router-link>
       </b-card-text>
 
@@ -40,16 +47,24 @@
         <div v-if="countBiggerThanThree" id="answer-alerter">
           <div :class="alertAnswer" role="alert">
             You have attempted
-            <span id="word-ans">3</span>times. The correct answer is
+            <span id="word-ans">3</span> times. The correct answer is
             <span id="word-ans">{{ randomWord }}</span>
             Click
             <span id="word-ans">Play Again</span> to continue playing
           </div>
         </div>
-        <b-form-input v-model="answer" placeholder="Enter your answer" class="col-md-4"></b-form-input>
-        <b-button variant="primary" id="sub-button" @click="submitAnswer">Submit Answer</b-button>
+        <b-form-input
+          v-model="answer"
+          placeholder="Enter your answer"
+          class="col-md-4"
+        ></b-form-input>
+        <b-button variant="primary" id="sub-button" @click="submitAnswer"
+          >Submit Answer</b-button
+        >
         <div class="row">
-          <b-button variant="danger" class="again-button" @click="replayGame">Play Again</b-button>
+          <b-button variant="danger" class="again-button" @click="replayGame"
+            >Play Again</b-button
+          >
         </div>
       </div>
     </b-card>
@@ -57,34 +72,36 @@
 </template>
 
 <script>
-require("dotenv").config();
-import wordData from "../../public/wordData";
-import axios from "axios";
-import NavBar from "./NavBar.vue";
+require('dotenv').config();
+import wordData from '../../public/wordData';
+import axios from 'axios';
+import NavBar from './NavBar.vue';
+import { updateWinCount, updateLossCount } from '../../public/callFirebase';
 
 /* eslint-disable no-unused-vars */
 export default {
   data: function() {
     return {
+      playerName: this.$route.params.playerName,
       wordData: wordData.data,
-      randomWord: "",
+      randomWord: '',
       category: this.$route.params.category,
-      hintone: "",
-      hinttwo: "",
-      hintthree: "",
-      answer: "",
+      hintone: '',
+      hinttwo: '',
+      hintthree: '',
+      answer: '',
       showFailure: false,
       showSuccess: false,
-      alertFailure: "alert alert-danger col-md-8",
-      alertSuccess: "alert alert-success col-md-8",
-      alertAnswer: "alert alert-secondary col-md-8",
+      alertFailure: 'alert alert-danger col-md-8',
+      alertSuccess: 'alert alert-success col-md-8',
+      alertAnswer: 'alert alert-secondary col-md-8',
       attemptCount: 0,
       attemptLeft: 3,
       countBiggerThanThree: false,
       winCount: 0,
       lossCount: 0,
       dataLoaded: false,
-      noData: false
+      noData: false,
     };
   },
   methods: {
@@ -102,31 +119,31 @@ export default {
     },
     populateHint: function() {
       axios({
-        method: "GET",
-        url: "https://wordsapiv1.p.rapidapi.com/words/" + this.randomWord,
+        method: 'GET',
+        url: 'https://wordsapiv1.p.rapidapi.com/words/' + this.randomWord,
         headers: {
-          "content-type": "application/octet-stream",
-          "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
-          "x-rapidapi-key": process.env.VUE_APP_WORD_API_KEY
-        }
+          'content-type': 'application/octet-stream',
+          'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
+          'x-rapidapi-key': process.env.VUE_APP_WORD_API_KEY,
+        },
       })
-        .then(response => {
+        .then((response) => {
           this.dataLoaded = true;
           this.noData = false;
           this.hintone =
             response.data.results[0] == null
-              ? ""
+              ? ''
               : response.data.results[0].definition;
           this.hinttwo =
             response.data.results[1] == null
-              ? ""
+              ? ''
               : response.data.results[1].definition;
           this.hintthree =
             response.data.results[2] == null
-              ? ""
+              ? ''
               : response.data.results[2].definition;
         })
-        .catch(error => {
+        .catch((error) => {
           this.dataLoaded = true;
           this.noData = true;
           console.log(error);
@@ -140,7 +157,7 @@ export default {
       this.pickWord();
       this.populateHint();
       this.showSuccess = false;
-      document.getElementById("sub-button").disabled = false;
+      document.getElementById('sub-button').disabled = false;
     },
     submitAnswer: function() {
       if (
@@ -149,15 +166,18 @@ export default {
         this.showFailure = false;
         this.showSuccess = true;
         this.winCount += 1;
-        document.getElementById("sub-button").disabled = true;
+        document.getElementById('sub-button').disabled = true;
+        if (this.playerName && this.winCount > 0) {
+          updateWinCount(this.playerName, this.winCount);
+        }
       } else {
         this.showFailure = true;
         this.showSuccess = false;
         this.attemptCount += 1;
         this.attemptLeft -= 1;
       }
-      this.answer = "";
-    }
+      this.answer = '';
+    },
   },
   created() {
     this.pickWord();
@@ -170,13 +190,16 @@ export default {
         this.showFailure = false;
         this.showSuccess = false;
         this.lossCount += 1;
-        document.getElementById("sub-button").disabled = true;
+        document.getElementById('sub-button').disabled = true;
+        if (this.playerName && this.lossCount > 0) {
+          updateLossCount(this.playerName, this.lossCount);
+        }
       }
-    }
+    },
   },
   components: {
-    NavBar
-  }
+    NavBar,
+  },
 };
 </script>
 

@@ -14,8 +14,8 @@ Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/categories', component: HomePage },
-  { path: '/categories/:category', component: Game },
+  { path: '/categories', name: 'HomePage', props: true, component: HomePage },
+  { path: '/categories/:category', name: 'Game', props: true, component: Game },
   { path: '/stats', name: 'stats', props: true, component: Stats },
   { path: '/', name: 'logIn', props: true, component: LogIn },
   { path: '*', component: LogIn },

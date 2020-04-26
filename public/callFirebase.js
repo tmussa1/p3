@@ -38,3 +38,33 @@ export function saveUser(playerName, playerDOB) {
       console.error('Unable to add document: ', error);
     });
 }
+
+export function updateWinCount(playerName, winCount) {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(config);
+  }
+  let api = firebase.firestore();
+  api
+    .collection('users')
+    .where('name', '==', playerName)
+    .set({ wins: winCount });
+  // .get()
+  // .then(function(querySnapshot) {
+  //   console.log(querySnapshot, ' ', winCount);
+  // });
+}
+
+export function updateLossCount(playerName, lossCount) {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(config);
+  }
+  let api = firebase.firestore();
+  api
+    .collection('users')
+    .where('name', '==', playerName)
+    .set({ losses: lossCount });
+  // .get()
+  // .then(function(querySnapshot) {
+  //   console.log(querySnapshot, ' ', lossCount);
+  // });
+}

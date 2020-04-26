@@ -42,10 +42,9 @@ export default {
   methods: {
     savePlayer: function() {
       saveUser(this.playername, this.birthdate);
-      this.playername = '';
-      this.birthdate = '';
       this.$router.push({
-        path: '/categories',
+        name: 'HomePage',
+        params: { playerName: this.playername },
       });
     },
   },
