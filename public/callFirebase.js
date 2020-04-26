@@ -48,10 +48,6 @@ export function updateWinCount(playerName, winCount) {
     .collection('users')
     .where('name', '==', playerName)
     .set({ wins: winCount });
-  // .get()
-  // .then(function(querySnapshot) {
-  //   console.log(querySnapshot, ' ', winCount);
-  // });
 }
 
 export function updateLossCount(playerName, lossCount) {
@@ -63,8 +59,32 @@ export function updateLossCount(playerName, lossCount) {
     .collection('users')
     .where('name', '==', playerName)
     .set({ losses: lossCount });
-  // .get()
-  // .then(function(querySnapshot) {
-  //   console.log(querySnapshot, ' ', lossCount);
-  // });
+}
+
+export function getWinCount(playerName) {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(config);
+  }
+  let api = firebase.firestore();
+  api
+    .collection('users')
+    .where('name', '==', playerName)
+    .get()
+    .then(function(querySnapshot) {
+      return querySnapshot.docs.shift().data();
+    });
+}
+
+export function getLossCount(playerName) {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(config);
+  }
+  let api = firebase.firestore();
+  api
+    .collection('users')
+    .where('name', '==', playerName)
+    .get()
+    .then(function(querySnapshot) {
+      return querySnapshot.docs.shift().data();
+    });
 }

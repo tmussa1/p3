@@ -1,6 +1,6 @@
 <template>
   <div v-cloak>
-    <NavBar :winCount="winCount" :lossCount="lossCount" />
+    <NavBar :playerName="playerName" />
     <h3>Category - {{ category }}</h3>
     <b-card
       title="Name a word for"

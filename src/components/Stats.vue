@@ -17,14 +17,16 @@
 import NavBar from './NavBar.vue';
 import Chart from 'chart.js';
 import winningStatistics from './../../public/winningStatistics';
+import { getWinCount, getLossCount } from '../../public/callFirebase';
 
 /* eslint-disable no-unused-vars */
 export default {
   data: function() {
     return {
       winningStatistics: winningStatistics,
-      updatedWinCount: 0,
-      updatedLossCount: 0,
+      // updatedWinCount: 0,
+      // updatedLossCount: 0,
+      nowPlaying:this.$route.params.playerName,
     };
   },
   methods: {
@@ -37,8 +39,7 @@ export default {
       });
     },
     updateCount: function() {
-      this.updatedWinCount = parseInt(this.$route.params.winCount);
-      this.updatedLossCount = parseInt(this.$route.params.lossCount);
+      this.nowPlaying = this.$route.params.playerName;
     },
     playGame: function() {
       this.$router.push({
@@ -48,8 +49,8 @@ export default {
   },
   mounted() {
     this.updateCount();
-    this.winningStatistics.data.datasets[0].data[0] = this.updatedWinCount;
-    this.winningStatistics.data.datasets[0].data[1] = this.updatedLossCount;
+    this.winningStatistics.data.datasets[0].data[0] = getWinCount(this.nowPlaying);
+    this.winningStatistics.data.datasets[0].data[1] = getLossCount(this.nowPlaying);
     this.formChart(this.winningStatistics);
   },
   components: {
@@ -57,11 +58,11 @@ export default {
   },
   watch: {
     updatedWinCount: function() {
-      this.winningStatistics.data.datasets[0].data[0] += this.updatedWinCount;
+      this.winningStatistics.data.datasets[0].data[0] += getWinCount(this.nowPlaying);
       this.formChart(this.winningStatistics);
     },
     updatedLossCount: function() {
-      this.winningStatistics.data.datasets[0].data[1] += this.updatedLossCount;
+      this.winningStatistics.data.datasets[0].data[1] += getLossCount(this.nowPlaying);
       this.formChart(this.winningStatistics);
     },
   },
