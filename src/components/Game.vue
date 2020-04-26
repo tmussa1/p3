@@ -1,26 +1,27 @@
 <template>
   <div v-cloak>
-    <NavBar :showStats="true" :winCount="winCount" :lossCount="lossCount" />
+    <NavBar :showLogIn="false" :winCount="winCount" :lossCount="lossCount" />
     <h3>Category - {{ category }}</h3>
     <b-card title="Name a word for" body-class="text-center" header-tag="nav" class="card-top">
-      <b-card-text v-if="dataLoaded && !hintone && !hinttwo && !hintthree" class="hints">
+      <b-card-text v-if="noData && dataLoaded" class="hints">
         Sorry, there is no defintion available for the selected word or category
+        <div class="spacer"></div>
         <router-link to="/">
-          <b-button variant="danger" id="go-back">
-            <div class="spacer"></div>Try a different category
-          </b-button>
+          <b-button variant="danger" id="go-back">Try a different category</b-button>
         </router-link>
       </b-card-text>
 
-      <b-card-text v-if="hintone" class="hints">
-        <span>- {{ hintone }}</span>
-      </b-card-text>
-      <b-card-text v-if="hinttwo" class="hints">
-        <span>- {{ hinttwo }}</span>
-      </b-card-text>
-      <b-card-text v-if="hintthree" class="hints">
-        <span>- {{ hintthree }}</span>
-      </b-card-text>
+      <div class="hint-cards">
+        <b-card-text v-if="hintone" class="hints">
+          <span>- {{ hintone }}</span>
+        </b-card-text>
+        <b-card-text v-if="hinttwo" class="hints">
+          <span>- {{ hinttwo }}</span>
+        </b-card-text>
+        <b-card-text v-if="hintthree" class="hints">
+          <span>- {{ hintthree }}</span>
+        </b-card-text>
+      </div>
 
       <div v-if="hintone || hinttwo || hintthree">
         <div v-if="showFailure" id="fail-alerter">
@@ -49,10 +50,6 @@
         <b-button variant="primary" id="sub-button" @click="submitAnswer">Submit Answer</b-button>
         <div class="row">
           <b-button variant="danger" class="again-button" @click="replayGame">Play Again</b-button>
-          <div class="spacer"></div>
-          <router-link to="/" exact>
-            <b-button variant="success" class="diff-button">Pick a Category from HomePage</b-button>
-          </router-link>
         </div>
       </div>
     </b-card>
@@ -86,7 +83,8 @@ export default {
       countBiggerThanThree: false,
       winCount: 0,
       lossCount: 0,
-      dataLoaded: false
+      dataLoaded: false,
+      noData: false
     };
   },
   methods: {
@@ -114,6 +112,7 @@ export default {
       })
         .then(response => {
           this.dataLoaded = true;
+          this.noData = false;
           this.hintone =
             response.data.results[0] == null
               ? ""
@@ -128,6 +127,8 @@ export default {
               : response.data.results[2].definition;
         })
         .catch(error => {
+          this.dataLoaded = true;
+          this.noData = true;
           console.log(error);
         });
     },
@@ -190,17 +191,13 @@ export default {
   font-style: italic;
   font-weight: bold;
 }
-.hints span {
-  background: grey;
-}
 input {
   display: inline-block;
   border: 3px grey solid;
 }
 .row {
   margin-top: 50px;
-  margin-left: 375px;
-  margin-right: 350px;
+  margin-left: 600px;
 }
 .card-top {
   margin-bottom: 50px;
@@ -212,8 +209,7 @@ h3 {
 #sub-button {
   margin-left: 20px;
 }
-.again-button,
-.diff-button {
+.again-button {
   padding-left: 10px;
   padding-right: 10px;
 }
@@ -225,5 +221,11 @@ h3 {
 }
 #word-ans {
   font-weight: bold;
+}
+.hint-cards {
+  width: 50%;
+  margin-left: 300px;
+  margin-bottom: 50px;
+  border: 5px grey solid;
 }
 </style>

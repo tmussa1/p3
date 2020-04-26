@@ -42,7 +42,7 @@ export default {
     },
     playGame: function() {
       this.$router.push({
-        path: '/',
+        path: '/categories',
       });
     },
   },

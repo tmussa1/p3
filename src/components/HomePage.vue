@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :showStats="false" />
+    <NavBar :showLogIn="false" />
     <div class="row">
       <b-card-group deck>
         <div

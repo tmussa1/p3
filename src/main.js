@@ -7,16 +7,18 @@ import VueRouter from 'vue-router';
 import HomePage from './components/HomePage';
 import Game from './components/Game';
 import Stats from './components/Stats';
+import LogIn from './components/LogIn';
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', component: HomePage },
+  { path: '/categories', component: HomePage },
   { path: '/categories/:category', component: Game },
   { path: '/stats', name: 'stats', props: true, component: Stats },
-  { path: '*', component: HomePage },
+  { path: '/', name: 'logIn', props: true, component: LogIn },
+  { path: '*', component: LogIn },
 ];
 
 const router = new VueRouter({
