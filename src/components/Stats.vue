@@ -1,6 +1,6 @@
 <template>
   <div v-cloak>
-    <NavBar :showStats="true" />
+    <NavBar />
     <div class="row">
       <div id="chartDiv">
         <canvas id="player-statistics"></canvas>
@@ -24,9 +24,7 @@ export default {
   data: function() {
     return {
       winningStatistics: winningStatistics,
-      // updatedWinCount: 0,
-      // updatedLossCount: 0,
-      nowPlaying:this.$route.params.playerName,
+      nowPlaying: this.$props.playerName,
     };
   },
   methods: {
@@ -39,7 +37,7 @@ export default {
       });
     },
     updateCount: function() {
-      this.nowPlaying = this.$route.params.playerName;
+      this.nowPlaying = this.$props.playerName;
     },
     playGame: function() {
       this.$router.push({
@@ -49,8 +47,12 @@ export default {
   },
   mounted() {
     this.updateCount();
-    this.winningStatistics.data.datasets[0].data[0] = getWinCount(this.nowPlaying);
-    this.winningStatistics.data.datasets[0].data[1] = getLossCount(this.nowPlaying);
+    this.winningStatistics.data.datasets[0].data[0] = getWinCount(
+      this.nowPlaying
+    );
+    this.winningStatistics.data.datasets[0].data[1] = getLossCount(
+      this.nowPlaying
+    );
     this.formChart(this.winningStatistics);
   },
   components: {
@@ -58,14 +60,19 @@ export default {
   },
   watch: {
     updatedWinCount: function() {
-      this.winningStatistics.data.datasets[0].data[0] += getWinCount(this.nowPlaying);
+      this.winningStatistics.data.datasets[0].data[0] += getWinCount(
+        this.nowPlaying
+      );
       this.formChart(this.winningStatistics);
     },
     updatedLossCount: function() {
-      this.winningStatistics.data.datasets[0].data[1] += getLossCount(this.nowPlaying);
+      this.winningStatistics.data.datasets[0].data[1] += getLossCount(
+        this.nowPlaying
+      );
       this.formChart(this.winningStatistics);
     },
   },
+  props: ['playerName'],
 };
 </script>
 

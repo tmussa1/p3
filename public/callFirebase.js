@@ -39,52 +39,71 @@ export function saveUser(playerName, playerDOB) {
     });
 }
 
-export function updateWinCount(playerName, winCount) {
+export async function filter(collection, field, value) {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(config);
+  }
+  let api = firebase.firestore();
+  const snapshot = await api
+    .collection(collection)
+    .where(field, '==', value)
+    .get();
+  return snapshot.docs;
+}
+
+export function update(collection, id, updatedValue) {
   if (!firebase.apps.length) {
     firebase.initializeApp(config);
   }
   let api = firebase.firestore();
   api
-    .collection('users')
-    .where('name', '==', playerName)
-    .set({ wins: winCount });
+    .collection(collection)
+    .doc(id)
+    .update(updatedValue);
+}
+
+export function updateWinCount(playerName, winCount) {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(config);
+  }
+
+
+  filter('users', 'name', playerName).then((result) => {
+    let docRef = result.shift();
+    update('users', docRef.id, { wins: winCount });
+  });
 }
 
 export function updateLossCount(playerName, lossCount) {
   if (!firebase.apps.length) {
     firebase.initializeApp(config);
   }
-  let api = firebase.firestore();
-  api
-    .collection('users')
-    .where('name', '==', playerName)
-    .set({ losses: lossCount });
+
+
+  filter('users', 'name', playerName).then((result) => {
+    let docRef = result.shift();
+    update('users', docRef.id, { losses: lossCount });
+  });
 }
 
 export function getWinCount(playerName) {
   if (!firebase.apps.length) {
     firebase.initializeApp(config);
   }
-  let api = firebase.firestore();
-  api
-    .collection('users')
-    .where('name', '==', playerName)
-    .get()
-    .then(function(querySnapshot) {
-      return querySnapshot.docs.shift().data();
-    });
+
+  filter('users', 'name', playerName).then(function(querySnapshot) {
+    console.log('data1 ' + querySnapshot.shift().data()[0]);
+    return querySnapshot.shift();
+  });
 }
 
 export function getLossCount(playerName) {
   if (!firebase.apps.length) {
     firebase.initializeApp(config);
   }
-  let api = firebase.firestore();
-  api
-    .collection('users')
-    .where('name', '==', playerName)
-    .get()
-    .then(function(querySnapshot) {
-      return querySnapshot.docs.shift().data();
-    });
+
+  filter('users', 'name', playerName).then(function(querySnapshot) {
+    console.log('data2 ' + querySnapshot.shift().data()[0]);
+    return querySnapshot.shift();
+  });
 }

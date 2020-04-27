@@ -42,6 +42,7 @@ export default {
   methods: {
     savePlayer: function() {
       saveUser(this.playername, this.birthdate);
+      this.$emit('save-player', this.playername);
       this.$router.push({
         name: 'HomePage',
         params: { playerName: this.playername },

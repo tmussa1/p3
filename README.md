@@ -7,7 +7,7 @@
 
 _List the "pages" of your application_
 
-As long as you log in with the same name and date of birth, your scores will be saved and you can play again at a later time. 
+As long as you log in with the same name and date of birth, your scores will be saved and you can play again at a later time.
 
 ## SFC summary
 
@@ -43,6 +43,7 @@ The following references below have been used for a usccessful completion of the
 
 [How to update firbase collection](https://www.google.com/search?q=how+to+make+an+update+with+firbase+and+javascript&oq=how+to+make+an+update+with+firbase+and+javascript&aqs=chrome..69i57.11760j0j7&sourceid=chrome&ie=UTF-8#kpvalbx=_2fqlXo2zB8TEtQbC8YaQDg33)
 
+[Passing data from parent to child via router](https://forum.vuejs.org/t/pass-data-from-parent-view-to-child-router-view/27926/4)
 
 ## Notes for instructor
 
