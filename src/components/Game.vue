@@ -1,6 +1,10 @@
 <template>
   <div v-cloak>
-    <NavBar :playerName="playerName" />
+    <NavBar
+      :playerName="playerName"
+      :winCount="winCount"
+      :lossCount="lossCount"
+    />
     <h3>Category - {{ category }}</h3>
     <b-card
       title="Name a word for"
@@ -168,7 +172,7 @@ export default {
         this.winCount += 1;
         document.getElementById('sub-button').disabled = true;
         if (this.playerName && this.winCount > 0) {
-          updateWinCount(this.playerName, this.winCount);
+          updateWinCount(this.playerName, parseInt(this.winCount));
         }
       } else {
         this.showFailure = true;
@@ -192,7 +196,7 @@ export default {
         this.lossCount += 1;
         document.getElementById('sub-button').disabled = true;
         if (this.playerName && this.lossCount > 0) {
-          updateLossCount(this.playerName, this.lossCount);
+          updateLossCount(this.playerName, parseInt(this.lossCount));
         }
       }
     },

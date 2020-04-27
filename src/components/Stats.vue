@@ -17,7 +17,12 @@
 import NavBar from './NavBar.vue';
 import Chart from 'chart.js';
 import winningStatistics from './../../public/winningStatistics';
-import { getWinCount, getLossCount } from '../../public/callFirebase';
+import {
+  getWinCount,
+  getLossCount,
+  updateWinCount,
+  updateLossCount,
+} from '../../public/callFirebase';
 
 /* eslint-disable no-unused-vars */
 export default {
@@ -25,6 +30,8 @@ export default {
     return {
       winningStatistics: winningStatistics,
       nowPlaying: this.$props.playerName,
+      updatedLossCount: 0,
+      updatedWinCount: 0,
     };
   },
   methods: {
@@ -36,8 +43,10 @@ export default {
         options: statistics.options,
       });
     },
-    updateCount: function() {
+    updateValues: function() {
       this.nowPlaying = this.$props.playerName;
+      this.updatedWinCount = parseInt(this.$route.params.winCount);
+      this.updatedLossCount = parseInt(this.$route.params.lossCount);
     },
     playGame: function() {
       this.$router.push({
@@ -46,12 +55,12 @@ export default {
     },
   },
   mounted() {
-    this.updateCount();
-    this.winningStatistics.data.datasets[0].data[0] = getWinCount(
-      this.nowPlaying
+    this.updateValues();
+    this.winningStatistics.data.datasets[0].data[0] = parseInt(
+      getWinCount(this.nowPlaying)
     );
-    this.winningStatistics.data.datasets[0].data[1] = getLossCount(
-      this.nowPlaying
+    this.winningStatistics.data.datasets[0].data[1] = parseInt(
+      getLossCount(this.nowPlaying)
     );
     this.formChart(this.winningStatistics);
   },
@@ -60,19 +69,30 @@ export default {
   },
   watch: {
     updatedWinCount: function() {
-      this.winningStatistics.data.datasets[0].data[0] += getWinCount(
-        this.nowPlaying
+      this.winningStatistics.data.datasets[0].data[0] =
+        parseInt(getWinCount(this.nowPlaying)) + parseInt(this.updatedWinCount);
+      updateWinCount(
+        this.playerName,
+        parseInt(this.winningStatistics.data.datasets[0].data[0])
       );
+      console.log('now playing', this.nowPlaying);
+      console.log('get loss count ', getLossCount(this.nowPlaying));
       this.formChart(this.winningStatistics);
     },
     updatedLossCount: function() {
-      this.winningStatistics.data.datasets[0].data[1] += getLossCount(
-        this.nowPlaying
+      this.winningStatistics.data.datasets[0].data[1] =
+        parseInt(getLossCount(this.nowPlaying)) + parseInt(this.updatedLossCount);
+      updateLossCount(
+        this.playerName,
+        parseInt(this.winningStatistics.data.datasets[0].data[1])
       );
+      console.log('now playing', this.nowPlaying);
+      console.log('get loss count ', getLossCount(this.nowPlaying));
+
       this.formChart(this.winningStatistics);
     },
   },
-  props: ['playerName'],
+  props: ['playerName', 'winCount', 'lossCount'],
 };
 </script>
 

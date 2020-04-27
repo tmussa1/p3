@@ -51,8 +51,8 @@ export default {
     return {
       wordData: wordData.data,
       searchWord: '',
-      updatedWinCount: 0,
-      updatedLossCount: 0,
+      updatedWinCount: this.$props.winCount,
+      updatedLossCount: this.$props.lossCount,
     };
   },
   methods: {

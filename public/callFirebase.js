@@ -67,10 +67,9 @@ export function updateWinCount(playerName, winCount) {
     firebase.initializeApp(config);
   }
 
-
   filter('users', 'name', playerName).then((result) => {
     let docRef = result.shift();
-    update('users', docRef.id, { wins: winCount });
+    update('users', docRef.id, { wins: parseInt(winCount) });
   });
 }
 
@@ -79,10 +78,9 @@ export function updateLossCount(playerName, lossCount) {
     firebase.initializeApp(config);
   }
 
-
   filter('users', 'name', playerName).then((result) => {
     let docRef = result.shift();
-    update('users', docRef.id, { losses: lossCount });
+    update('users', docRef.id, { losses: parseInt(lossCount) });
   });
 }
 
@@ -91,9 +89,21 @@ export function getWinCount(playerName) {
     firebase.initializeApp(config);
   }
 
-  filter('users', 'name', playerName).then(function(querySnapshot) {
-    console.log('data1 ' + querySnapshot.shift().data()[0]);
-    return querySnapshot.shift();
+  let api = firebase.firestore();
+
+  filter('users', 'name', playerName).then(function(result) {
+    let docRef = result.shift();
+    api
+      .collection('users')
+      .doc(docRef.id)
+      .get()
+      .then(function(doc) {
+        return parseInt(doc.data().wins);
+      })
+      .catch(function(error) {
+        console.log('Error getting documents: ' + error);
+      });
+    return result.shift();
   });
 }
 
@@ -102,8 +112,21 @@ export function getLossCount(playerName) {
     firebase.initializeApp(config);
   }
 
-  filter('users', 'name', playerName).then(function(querySnapshot) {
-    console.log('data2 ' + querySnapshot.shift().data()[0]);
-    return querySnapshot.shift();
+  let api = firebase.firestore();
+
+  filter('users', 'name', playerName).then(function(result) {
+    let docRef = result.shift();
+    api
+      .collection('users')
+      .doc(docRef.id)
+      .get()
+      .then(function(doc) {
+        console.log('losses ', doc.data());
+        return parseInt(doc.data().losses);
+      })
+      .catch(function(error) {
+        console.log('Error getting documents: ' + error);
+      });
+    return result.shift();
   });
 }
