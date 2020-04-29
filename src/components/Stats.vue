@@ -6,7 +6,7 @@
         <canvas id="player-statistics"></canvas>
       </div>
       <div class="spacer"></div>
-      <b-button variant="success" @click="playGame" id="game-button">Go back to the game</b-button>
+      <b-button variant="success" @click="playGame" id="game-button">Choose a Category</b-button>
     </div>
   </div>
 </template>
@@ -70,7 +70,6 @@ export default {
   margin-left: 360px;
 }
 #game-button {
-  width: 200px;
   height: 40px;
   margin-top: 100px;
 }

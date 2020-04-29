@@ -3,7 +3,7 @@
     <NavBar />
     <h3>Category - {{ category }}</h3>
     <b-card title="Name a word for" body-class="text-center" header-tag="nav" class="card-top">
-      <b-card-text v-if="noData && dataLoaded" class="hints">
+      <b-card-text v-if="noData && !dataLoaded" class="hints">
         Sorry, there is no defintion available for the selected word or category
         <div class="spacer"></div>
         <router-link to="/categories">
@@ -132,7 +132,7 @@ export default {
               : response.data.results[2].definition;
         })
         .catch(error => {
-          this.dataLoaded = true;
+          this.dataLoaded = false;
           this.noData = true;
           console.log(error);
         });
