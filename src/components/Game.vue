@@ -72,7 +72,6 @@ import {
 export default {
   data: function() {
     return {
-      playerName: localStorage.getItem("player"),
       wordData: wordData.data,
       randomWord: "",
       category: this.$route.params.category,
@@ -88,10 +87,10 @@ export default {
       attemptCount: 0,
       attemptLeft: 3,
       countBiggerThanThree: false,
-      winCount: getWinCount(this.playerName),
-      lossCount: getLossCount(this.playerName),
       dataLoaded: false,
-      noData: false
+      noData: false,
+      updatedWinCount: 0,
+      updatedLossCount: 0,
     };
   },
   methods: {
@@ -156,11 +155,9 @@ export default {
       ) {
         this.showFailure = false;
         this.showSuccess = true;
-        this.winCount += 1;
         document.getElementById("sub-button").disabled = true;
-        if (this.winCount > 0) {
-          updateWinCount(this.playerName, parseInt(this.winCount));
-        }
+        this.updatedWinCount += 1;
+        updateWinCount(this.playerName, this.updatedWinCount);
       } else {
         this.showFailure = true;
         this.showSuccess = false;
@@ -180,13 +177,36 @@ export default {
         this.countBiggerThanThree = true;
         this.showFailure = false;
         this.showSuccess = false;
-        this.lossCount += 1;
         document.getElementById("sub-button").disabled = true;
-        if (this.lossCount > 0) {
-          updateLossCount(this.playerName, parseInt(this.lossCount));
-        }
+        this.updatedLossCount += 1;
+        updateLossCount(this.playerName, this.updatedLossCount);
       }
     }
+  },
+  computed: {
+    playerName: function() {
+      return localStorage.getItem("player");
+    },
+    winCount: {
+      get() {
+        return getWinCount(this.playerName);
+      },
+      set(newCount) {
+        this.winCount = newCount;
+      }
+    },
+    lossCount: {
+      get: function() {
+        return getLossCount(this.playerName);
+      },
+      set: function(newCount) {
+        this.lossCount = newCount;
+      }
+    }
+  },
+  mounted(){
+    this.updatedWinCount = this.winCount;
+    this.updatedLossCount = this.lossCount;
   },
   components: {
     NavBar
