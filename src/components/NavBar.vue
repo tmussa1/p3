@@ -5,16 +5,8 @@
         <b-navbar-brand id="nav-home">Categories</b-navbar-brand>
       </router-link>
       <b-navbar variant="faded" type="light">
-        <router-link
-          :to="{
-            name: 'stats',
-            params: {
-              playerName: playerName,
-              winCount: updatedWinCount,
-              lossCount: updatedLossCount,
-            },
-          }"
-        >
+        <router-link :to="{
+            name: 'stats'}">
           <b-navbar-brand>Scores</b-navbar-brand>
         </router-link>
       </b-navbar>
@@ -28,13 +20,7 @@
               placeholder="Filter categories"
               v-model="searchWord"
             ></b-form-input>
-            <b-button
-              size="sm"
-              class="my-2 my-sm-0"
-              type="submit"
-              @click="searchCategory"
-              >Search</b-button
-            >
+            <b-button size="sm" class="my-2 my-sm-0" type="submit" @click="searchCategory">Search</b-button>
           </b-nav-form>
         </b-navbar-nav>
       </b-collapse>
@@ -43,37 +29,26 @@
 </template>
 
 <script>
-import wordData from '../../public/wordData';
+import wordData from "../../public/wordData";
 
 /* eslint-disable no-unused-vars */
 export default {
   data: function() {
     return {
       wordData: wordData.data,
-      searchWord: '',
-      updatedWinCount: this.$props.winCount,
-      updatedLossCount: this.$props.lossCount,
+      searchWord: ""
     };
   },
   methods: {
     searchCategory: function() {
       this.$router.push({
-        path: '/categories',
+        path: "/categories"
       });
       this.$router.push({
-        path: 'categories/' + this.searchWord,
+        path: "categories/" + this.searchWord
       });
-    },
-  },
-  props: ['playerName', 'winCount', 'lossCount'],
-  watch: {
-    winCount: function() {
-      this.updatedWinCount = this.$props.winCount;
-    },
-    lossCount: function() {
-      this.updatedLossCount = this.$props.lossCount;
-    },
-  },
+    }
+  }
 };
 </script>
 

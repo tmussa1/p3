@@ -28,15 +28,20 @@ export function saveUser(playerName, playerDOB) {
   }
   let api = firebase.firestore();
   let user = { name: playerName, dob: playerDOB, wins: 0, losses: 0 };
-  api
-    .collection('users')
-    .add(user)
-    .then(function(docRef) {
-      console.log('Word document Document written' + docRef);
-    })
-    .catch(function(error) {
-      console.error('Unable to add document: ', error);
-    });
+
+  filter('users', 'name', playerName).then((result) => {
+    if (!result.shift()) {
+      api
+        .collection('users')
+        .add(user)
+        .then(function(docRef) {
+          console.log('Word document Document written' + docRef);
+        })
+        .catch(function(error) {
+          console.error('Unable to add document: ', error);
+        });
+    }
+  });
 }
 
 export async function filter(collection, field, value) {
@@ -90,6 +95,7 @@ export function getWinCount(playerName) {
   }
 
   let api = firebase.firestore();
+  let winCount = 0;
 
   filter('users', 'name', playerName).then(function(result) {
     let docRef = result.shift();
@@ -98,13 +104,13 @@ export function getWinCount(playerName) {
       .doc(docRef.id)
       .get()
       .then(function(doc) {
-        return parseInt(doc.data().wins);
+        winCount = doc.data().wins;
       })
       .catch(function(error) {
         console.log('Error getting documents: ' + error);
       });
-    return result.shift();
   });
+  return winCount;
 }
 
 export function getLossCount(playerName) {
@@ -113,6 +119,7 @@ export function getLossCount(playerName) {
   }
 
   let api = firebase.firestore();
+  let lossCount = 0;
 
   filter('users', 'name', playerName).then(function(result) {
     let docRef = result.shift();
@@ -121,12 +128,11 @@ export function getLossCount(playerName) {
       .doc(docRef.id)
       .get()
       .then(function(doc) {
-        console.log('losses ', doc.data());
-        return parseInt(doc.data().losses);
+        lossCount = doc.data().losses;
       })
       .catch(function(error) {
         console.log('Error getting documents: ' + error);
       });
-    return result.shift();
   });
+  return lossCount;
 }

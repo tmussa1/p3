@@ -9,11 +9,7 @@
     </b-navbar>
     <div class="col-md-4" id="name-dob">
       <label for="player-name">What's your name?</label>
-      <b-form-input
-        v-model="playername"
-        id="player-name"
-        placeholder="Enter your name"
-      ></b-form-input>
+      <b-form-input v-model="playername" id="player-name" placeholder="Enter your name"></b-form-input>
       <label for="datepicker-placeholder">What's your birthday?</label>
       <b-form-datepicker
         v-model="birthdate"
@@ -21,34 +17,31 @@
         placeholder="Choose a date"
         local="en"
       ></b-form-datepicker>
-      <b-button variant="primary" @click="savePlayer" id="save-player"
-        >Let's Play</b-button
-      >
+      <b-button variant="primary" @click="savePlayer" id="save-player">Let's Play</b-button>
     </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable no-unused-vars */
-import { saveUser } from '../../public/callFirebase';
+import { saveUser } from "../../public/callFirebase";
 
 export default {
   data: function() {
     return {
-      playername: '',
-      birthdate: '',
+      playername: "",
+      birthdate: ""
     };
   },
   methods: {
     savePlayer: function() {
       saveUser(this.playername, this.birthdate);
-      this.$emit('save-player', this.playername);
+      localStorage.setItem("player", this.playername);
       this.$router.push({
-        name: 'HomePage',
-        params: { playerName: this.playername },
+        name: "HomePage"
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -9,18 +9,13 @@
           class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
         >
           <b-row class="card-indv">
-            <b-card
-              bg-variant="success"
-              text-variant="black"
-              class="text-center"
-            >
+            <b-card bg-variant="success" text-variant="black" class="text-center">
               <b-card-text>Category - {{ word.category }}</b-card-text>
               <router-link
                 :to="{
                   name: 'Game',
                   params: {
-                    category: word.category,
-                    playerName: playerName,
+                    category: word.category
                   },
                 }"
               >
@@ -30,28 +25,26 @@
           </b-row>
         </div>
       </b-card-group>
-      {{ playerName }}
     </div>
   </div>
 </template>
 
 <script>
-import wordData from '../../public/wordData';
-import NavBar from './NavBar.vue';
+import wordData from "../../public/wordData";
+import NavBar from "./NavBar.vue";
 
 /* eslint-disable no-unused-vars */
 export default {
   data: function() {
     return {
-      wordData: wordData.data,
-      playerName: this.$route.params.playerName,
+      wordData: wordData.data
     };
   },
   methods: {},
   mounted() {},
   components: {
-    NavBar,
-  },
+    NavBar
+  }
 };
 </script>
 <style scoped>
