@@ -89,50 +89,14 @@ export function updateLossCount(playerName, lossCount) {
   });
 }
 
-export function getWinCount(playerName) {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(config);
-  }
-
-  let api = firebase.firestore();
-  let winCount = 0;
-
-  filter('users', 'name', playerName).then(function(result) {
+export function getCounts(playerName) {
+  return filter('users', 'name', playerName).then(function(result) {
     let docRef = result.shift();
-    api
-      .collection('users')
-      .doc(docRef.id)
-      .get()
-      .then(function(doc) {
-        winCount = doc.data().wins;
-      })
-      .catch(function(error) {
-        console.log('Error getting documents: ' + error);
-      });
+    let wins = docRef.data().wins;
+    let losses = docRef.data().losses;
+    return {
+      wins: wins,
+      losses: losses,
+    };
   });
-  return winCount;
-}
-
-export function getLossCount(playerName) {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(config);
-  }
-
-  let api = firebase.firestore();
-  let lossCount = 0;
-
-  filter('users', 'name', playerName).then(function(result) {
-    let docRef = result.shift();
-    api
-      .collection('users')
-      .doc(docRef.id)
-      .get()
-      .then(function(doc) {
-        lossCount = doc.data().losses;
-      })
-      .catch(function(error) {
-        console.log('Error getting documents: ' + error);
-      });
-  });
-  return lossCount;
 }

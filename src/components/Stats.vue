@@ -10,20 +10,19 @@
     </div>
   </div>
 </template>
-
 <script>
 import NavBar from "./NavBar.vue";
 import Chart from "chart.js";
 import winningStatistics from "./../../public/winningStatistics";
-import { getWinCount, getLossCount } from "../../public/callFirebase";
+import { getCounts } from "../../public/callFirebase";
 
 /* eslint-disable no-unused-vars */
 export default {
   data: function() {
     return {
       winningStatistics: winningStatistics,
-      updatedWinCount: 0,
-      updatedLossCount: 0
+      winCount: null,
+      lossCOunt: null
     };
   },
   methods: {
@@ -42,13 +41,13 @@ export default {
     }
   },
   mounted() {
-    this.updatedWinCount += this.winCount;
-    this.updatedLossCount += this.lossCount;
-    console.log("from stats won ", this.updatedWinCount, " name ", this.playerName);
-    console.log("from stats lost ", this.updatedLossCount, " name ", this.playerName);
-    this.winningStatistics.data.datasets[0].data[0] = this.updatedWinCount;
-    this.winningStatistics.data.datasets[0].data[1] = this.updatedLossCount;
-    this.formChart(this.winningStatistics);
+    getCounts(this.playerName).then(response => {
+      this.winCount = response.wins;
+      this.lossCount = response.losses;
+      this.winningStatistics.data.datasets[0].data[0] = this.winCount;
+      this.winningStatistics.data.datasets[0].data[1] = this.lossCount;
+      this.formChart(this.winningStatistics);
+    });
   },
   components: {
     NavBar
@@ -56,36 +55,6 @@ export default {
   computed: {
     playerName: function() {
       return localStorage.getItem("player");
-    },
-    winCount: {
-      get() {
-        return getWinCount(this.playerName);
-      },
-      set(newCount) {
-        this.winCount = newCount;
-      }
-    },
-    lossCount: {
-      get: function() {
-        return getLossCount(this.playerName);
-      },
-      set: function(newCount) {
-        this.lossCount = newCount;
-      }
-    }
-  },
-  watch: {
-    winCount: function() {
-      console.log("from stats won watch ", this.updatedWinCount);
-      this.updatedWinCount += this.winCount;
-      this.winningStatistics.data.datasets[0].data[0] = this.updatedWinCount;
-      this.formChart(this.winningStatistics);
-    },
-    lossCount: function() {
-      console.log("from stats lost watch", this.updatedLossCount);
-      this.updatedLossCount += this.lossCount;
-      this.winningStatistics.data.datasets[0].data[1] = this.updatedLossCount;
-      this.formChart(this.winningStatistics);
     }
   }
 };

@@ -64,8 +64,7 @@ import NavBar from "./NavBar.vue";
 import {
   updateWinCount,
   updateLossCount,
-  getLossCount,
-  getWinCount
+  getCounts
 } from "../../public/callFirebase";
 
 /* eslint-disable no-unused-vars */
@@ -89,8 +88,8 @@ export default {
       countBiggerThanThree: false,
       dataLoaded: false,
       noData: false,
-      updatedWinCount: 0,
-      updatedLossCount: 0,
+      winCount: null,
+      lossCount: null
     };
   },
   methods: {
@@ -103,7 +102,6 @@ export default {
           var wordArray = this.wordData.words[i].wordList;
           let rand = Math.floor(Math.random() * wordArray.length);
           this.randomWord = wordArray[rand];
-          console.log(this.randomWord);
         }
       }
     },
@@ -148,6 +146,7 @@ export default {
       this.populateHint();
       this.showSuccess = false;
       document.getElementById("sub-button").disabled = false;
+      this.answer = "";
     },
     submitAnswer: function() {
       if (
@@ -156,8 +155,8 @@ export default {
         this.showFailure = false;
         this.showSuccess = true;
         document.getElementById("sub-button").disabled = true;
-        this.updatedWinCount += 1;
-        updateWinCount(this.playerName, this.updatedWinCount);
+        this.winCount += 1;
+        updateWinCount(this.playerName, this.winCount);
       } else {
         this.showFailure = true;
         this.showSuccess = false;
@@ -178,8 +177,8 @@ export default {
         this.showFailure = false;
         this.showSuccess = false;
         document.getElementById("sub-button").disabled = true;
-        this.updatedLossCount += 1;
-        updateLossCount(this.playerName, this.updatedLossCount);
+        this.lossCount += 1;
+        updateLossCount(this.playerName, this.lossCount);
       }
     }
   },
@@ -187,26 +186,12 @@ export default {
     playerName: function() {
       return localStorage.getItem("player");
     },
-    winCount: {
-      get() {
-        return getWinCount(this.playerName);
-      },
-      set(newCount) {
-        this.winCount = newCount;
-      }
-    },
-    lossCount: {
-      get: function() {
-        return getLossCount(this.playerName);
-      },
-      set: function(newCount) {
-        this.lossCount = newCount;
-      }
-    }
   },
-  mounted(){
-    this.updatedWinCount = this.winCount;
-    this.updatedLossCount = this.lossCount;
+  mounted() {
+    getCounts(this.playerName).then(response => {
+      this.winCount = response.wins;
+      this.lossCount = response.losses;
+    });
   },
   components: {
     NavBar
