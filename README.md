@@ -5,29 +5,29 @@
 
 ## Pages summary
 
-- LogIn Page _Takes the name of the player and date of birth. Stores the name of the player in local storge for later use. Redirects user to HomePage after that_
+- **LogIn Page** _Takes the name of the player and date of birth. Stores the name of the player in local storge for later use. Redirects user to HomePage after that_
 
-- Home Page _Lists 12 predefined categories the player can choose from in order to get a random word in that category_
+- **Home Page** _Lists 12 predefined categories the player can choose from in order to get a random word in that category_
 
-- Game Page _This page is where the user plays the game and gets feedback on a correct or incorrect response. The correct answer will be displayed after 3 wrong attempts_
+- **Game Page** _This page is where the user plays the game and gets feedback on a correct or incorrect response. The correct answer will be displayed after 3 wrong attempts_
 
-- Statistics Page _This page draws a graph of the count of losses vs wins. The data is persisted for a given user and the chart shows the comprehensive score_
+- **Statistics Page** _This page draws a graph of the count of losses vs wins. The data is persisted for a given user and the chart shows the comprehensive score_
 
-- NavBar/Search _From anywhere in the application, the user can search a category from one in the list to redirected to a word game in that category. A friendly error message will be displayed if the category is not in the list_
+- **NavBar/Search** _From anywhere in the application, the user can search a category from one in the list to redirected to a word game in that category. A friendly error message will be displayed if the category is not in the list_
 
 ## SFC summary
 
 ##### The pages and components closely allign with each other for unless some subtle differences
 
-- LogIn Component _Used for registering as a player and have running scores kept_
+- **LogIn Component** _Used for registering as a player and have running scores kept_
 
-- Home Component _Used for displaying list of categories_
+- **Home Component** _Used for displaying list of categories_
 
-- Game Component _This is where the actual game lies_
+- **Game Component** _This is where the actual game lies_
 
-- Stats Component _Shows the history of running score to the user_
+- **Stats Component** _Shows the history of running score to the user_
 
-- NavBar Component _Shared among other components to navigate between pages and perform search functionality_
+- **NavBar Component** _Shared among other components to navigate between pages and perform search functionality_
 
 ## Server interaction
 
