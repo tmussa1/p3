@@ -1,3 +1,4 @@
+//List of words and there categories to be persisted in firebase
 export const wordData = {
     data: {
         words: [

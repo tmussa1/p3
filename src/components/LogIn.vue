@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- This is the login page that prompts user for name and date of birth -->
     <b-navbar type="dark" variant="dark">
       <b-navbar-nav>
         <router-link to="/" class="log-text">
@@ -9,7 +10,12 @@
     </b-navbar>
     <div class="col-md-4" id="name-dob">
       <label for="player-name">What's your name?</label>
-      <b-form-input v-model="playername" id="player-name" placeholder="Enter your name"></b-form-input>
+      <b-form-input
+        v-model="playername"
+        id="player-name"
+        placeholder="Enter your name"
+        v-on:keyup.enter="savePlayer"
+      ></b-form-input>
       <label for="datepicker-placeholder">What's your birthday?</label>
       <b-form-datepicker
         v-model="birthdate"
@@ -34,6 +40,8 @@ export default {
     };
   },
   methods: {
+    //Persist the player's name and date of birth
+    //Then redirect to the homepage
     savePlayer: function() {
       saveUser(this.playername, this.birthdate);
       localStorage.setItem("player", this.playername);

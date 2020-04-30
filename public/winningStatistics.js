@@ -1,3 +1,4 @@
+//Stores some graphics utility for the chart to be drawn
 export const winningStatistics = {
   type: 'bar',
   data: {

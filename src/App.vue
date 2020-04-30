@@ -1,4 +1,5 @@
 <template>
+  <!-- Entry point to the router powered application -->
   <div id="app" v-cloak>
     <router-view></router-view>
   </div>

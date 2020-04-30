@@ -1,4 +1,6 @@
 <template>
+  <!-- A responsive running score graph showing wins/losses statistics. The data is persisted
+  based on player name and is accessible at a later point -->
   <div v-cloak>
     <NavBar />
     <div class="row">
@@ -22,10 +24,11 @@ export default {
     return {
       winningStatistics: winningStatistics,
       winCount: null,
-      lossCOunt: null
+      lossCount: null
     };
   },
   methods: {
+    //Draws the chart based on Canvas API and Chart.js
     formChart: function(statistics) {
       let chartCanvas = document.getElementById("player-statistics");
       let playerChart = new Chart(chartCanvas, {
@@ -34,6 +37,7 @@ export default {
         options: statistics.options
       });
     },
+    //Players can navigate to the categories section from here
     playGame: function() {
       this.$router.push({
         path: "/categories"
@@ -41,6 +45,7 @@ export default {
     }
   },
   mounted() {
+    //Fetches records of current player and forms initial graph
     getCounts(this.playerName).then(response => {
       this.winCount = response.wins;
       this.lossCount = response.losses;
@@ -53,6 +58,7 @@ export default {
     NavBar
   },
   computed: {
+    //Fetches current player name from local storage
     playerName: function() {
       return localStorage.getItem("player");
     }

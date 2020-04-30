@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Provides router powered navigation and search functionality -->
     <b-navbar type="dark" variant="dark">
       <router-link to="/categories">
         <b-navbar-brand id="nav-home">Categories</b-navbar-brand>
@@ -39,13 +40,13 @@ export default {
       searchWord: ""
     };
   },
+  //The app has a search functionality. It enables case insensitive finding of
+  //one of the 12 categories. Displays a friendly error message if the category
+  //to be searched is not one in the list
   methods: {
     searchCategory: function() {
       this.$router.push({
-        path: "/categories"
-      });
-      this.$router.push({
-        path: "categories/" + this.searchWord
+        path: "/categories/" + this.searchWord
       });
     }
   }

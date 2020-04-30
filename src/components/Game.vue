@@ -1,7 +1,9 @@
 <template>
+  <!-- This page is the cruz of the game -->
   <div v-cloak>
     <NavBar />
     <h3>Category - {{ category }}</h3>
+    <!-- Display appropriate message when defintion is not available to the selected word -->
     <b-card title="Name a word for" body-class="text-center" header-tag="nav" class="card-top">
       <b-card-text v-if="noData && !dataLoaded" class="hints">
         Sorry, there is no defintion available for the selected word or category
@@ -11,6 +13,7 @@
         </router-link>
       </b-card-text>
 
+      <!-- Show a maximum of 3 definitions -->
       <div class="hint-cards">
         <b-card-text v-if="hintone" class="hints">
           <span>- {{ hintone }}</span>
@@ -23,6 +26,7 @@
         </b-card-text>
       </div>
 
+      <!-- Display a friendly message for wrong answers and show attempts left -->
       <div v-if="hintone || hinttwo || hintthree">
         <div v-if="showFailure" id="fail-alerter">
           <div :class="alertFailure" role="alert">
@@ -31,12 +35,14 @@
             correct answer will be displayed
           </div>
         </div>
+        <!-- Display a friendly message upon a correct answer -->
         <div v-if="showSuccess" id="success-alerter">
           <div :class="alertSuccess" role="alert">
             Congratulations, your response was correct! Click
             <span id="word-ans">Play Again</span> or choose a different category
           </div>
         </div>
+        <!-- Show correct answer after 3 attempts and disable submitting answer -->
         <div v-if="countBiggerThanThree" id="answer-alerter">
           <div :class="alertAnswer" role="alert">
             You have attempted
@@ -46,6 +52,7 @@
             <span id="word-ans">Play Again</span> to continue playing
           </div>
         </div>
+        <!-- Buttons to submit answer and replay game with a different word -->
         <b-form-input v-model="answer" placeholder="Enter your answer" class="col-md-4"></b-form-input>
         <b-button variant="primary" id="sub-button" @click="submitAnswer">Submit Answer</b-button>
         <div class="row">
@@ -93,6 +100,7 @@ export default {
     };
   },
   methods: {
+    // Randomly picks a word populated in firebase
     pickWord: function() {
       for (let i = 0; i < this.wordData.words.length; i++) {
         if (
@@ -105,6 +113,7 @@ export default {
         }
       }
     },
+    // Pulls definitions of those words from WordAPI
     populateHint: function() {
       axios({
         method: "GET",
@@ -137,6 +146,7 @@ export default {
           console.log(error);
         });
     },
+    //Pulls a new word with the corresponding definition
     replayGame: function() {
       this.showFailure = false;
       this.attemptCount = 0;
@@ -148,6 +158,8 @@ export default {
       document.getElementById("sub-button").disabled = false;
       this.answer = "";
     },
+    //Submits an answer and updates the number of correct answers in firebase when user
+    //gets it right
     submitAnswer: function() {
       if (
         this.randomWord.trim().toLowerCase() == this.answer.trim().toLowerCase()
@@ -166,11 +178,13 @@ export default {
       this.answer = "";
     }
   },
+  //Uses created lifecycle hook to pull in the word and its definition
   created() {
     this.pickWord();
     this.populateHint();
   },
   watch: {
+    //After 3 attempts, update loss count
     attemptCount: function() {
       if (this.attemptCount == 3) {
         this.countBiggerThanThree = true;
@@ -182,11 +196,14 @@ export default {
       }
     }
   },
+  //Gets the player name from local storage
   computed: {
     playerName: function() {
       return localStorage.getItem("player");
-    },
+    }
   },
+  //Get the counts of wins and losses for this user if they have played before
+  //It will be zero if they never played before
   mounted() {
     getCounts(this.playerName).then(response => {
       this.winCount = response.wins;

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- This page displays the categories a user can choose to play in -->
     <NavBar />
     <div class="row">
       <b-card-group deck>
@@ -37,11 +38,11 @@ import NavBar from "./NavBar.vue";
 export default {
   data: function() {
     return {
+      // The list of categories are persisted in firebase and there is a method to seed 
+      // them in the app
       wordData: wordData.data
     };
   },
-  methods: {},
-  mounted() {},
   components: {
     NavBar
   }

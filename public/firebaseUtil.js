@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+//Retrieves API key from environment variable
 export const firebaseUtil = {
     data: {
         config: {
