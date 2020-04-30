@@ -1,21 +1,49 @@
 # Project 2
 
 - By: Tofik Mussa
-- Production URL: http://flashcardtofikmussa.me/
+- Production URL: http://flashcard.tofikmussa.me/
 
 ## Pages summary
 
-_List the "pages" of your application_
+- LogIn Page _Takes the name of the player and date of birth. Stores the name of the player in local storge for later use. Redirects user to HomePage after that_
 
-As long as you log in with the same name and date of birth, your scores will be saved and you can play again at a later time.
+- Home Page _Lists 12 predefined categories the player can choose from in order to get a random word in that category_
+
+- Game Page _This page is where the user plays the game and gets feedback on a correct or incorrect response. The correct answer will be displayed after 3 wrong attempts_
+
+- Statistics Page _This page draws a graph of the count of losses vs wins. The data is persisted for a given user and the chart shows the comprehensive score_
+
+- NavBar/Search _From anywhere in the application, the user can search a category from one in the list to redirected to a word game in that category. A friendly error message will be displayed if the category is not in the list_
 
 ## SFC summary
 
-_List the SFCs of your application_
+##### The pages and components closely allign with each other for unless some subtle differences
+
+- LogIn Component _Used for registering as a player and have running scores kept_
+
+- Home Component _Used for displaying list of categories_
+
+- Game Component _This is where the actual game lies_
+
+- Stats Component _Shows the history of running score to the user_
+
+- NavBar Component _Shared among other components to navigate between pages and perform search functionality_
 
 ## Server interaction
 
-_List the features in your application that are persisting and retrieving data from the server_
+##### Firebase is used for the following
+
+- Registering a new user
+
+- Updating the win/loss count of a user
+
+- Retrieving win/loss count of a user
+
+- Persisting list of categories in the seeding stage.
+
+##### WordAPI is used for the following
+
+- Pulling definitions for a randomly selected word in any of the categories
 
 ## Outside resources
 
@@ -49,18 +77,18 @@ The following references below have been used for a usccessful completion of the
 
 ### Vocabulary Quiz
 
-##### The application is a guessing game of words based on the definitions provided. The application is integrated with third party APIs to pull defintions and the user is randomly assigned a word to play with from a list in firbase based on a category of choice.
+##### The application is a guessing game of words based on the definitions provided. The application is integrated with third party APIs to pull defintions and the user is randomly assigned a word to play with from a list in firebase based on a category of choice.
 
-- The running score is per category. The user can select one of the 12 categories to play. Words will be randomly picked and definitions/hints are fetched from an external API.
+- The running score is persisted for a given user. The user can select one of the 12 categories to play. Words will be randomly picked and definitions/hints are fetched from an external API.
 
-- There is a search functionality for categories. It will default to the homepage if the search criterion is not found
+- There is a search functionality for categories. It will display a friendly error message if the search criterion is not found
 
 - A user can not submit answer again if he/she gets the correct answer or after 3 wrong attempts
 
-- The definitions of the words is pulled from an external API called WordAPI. The words in play however are defined in firebase and there is a component for seeding firebase.
+- The definitions of the words is pulled from an external API called WordAPI. The words in play however are defined in firebase and there is a utility method for seeding firebase with categories/words in the section.
 
 - The chart is drawn using chart js library.
 
-- The user can navigate using the buttons or a NavBar. The Navbar alternates between showing stats and categories depending on where the user is.
+- The user can navigate sometimes using the buttons for ease of use or a NavBar.
 
-- Some components communicate using params in the router link
+- Some components communicate using params in the router link. Local storage has also been used to centralize the storage of objects and simplify pulling data
