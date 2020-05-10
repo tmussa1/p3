@@ -3,12 +3,18 @@
     <!-- Provides router powered navigation and search functionality -->
     <b-navbar type="dark" variant="dark">
       <router-link to="/categories">
-        <b-navbar-brand id="nav-home">Categories</b-navbar-brand>
+        <b-navbar-brand id="nav-home">Category</b-navbar-brand>
       </router-link>
       <b-navbar variant="faded" type="light">
         <router-link :to="{
             name: 'stats'}">
-          <b-navbar-brand>Scores</b-navbar-brand>
+          <b-navbar-brand>Score</b-navbar-brand>
+        </router-link>
+      </b-navbar>
+      <b-navbar variant="faded" type="light">
+        <router-link :to="{
+            name: 'history'}">
+          <b-navbar-brand>History</b-navbar-brand>
         </router-link>
       </b-navbar>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>

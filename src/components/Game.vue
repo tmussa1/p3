@@ -1,65 +1,75 @@
 <template>
   <!-- This page is the cruz of the game -->
-  <div v-cloak>
+  <div>
     <NavBar />
-    <h3>Category - {{ category }}</h3>
-    <!-- Display appropriate message when defintion is not available to the selected word -->
-    <b-card title="Name a word for" body-class="text-center" header-tag="nav" class="card-top">
-      <b-card-text v-if="noData && !dataLoaded" class="hints">
-        Sorry, there is no defintion available for the selected word or category
-        <div class="spacer"></div>
-        <router-link to="/categories">
-          <b-button variant="danger" id="go-back">Try a different category</b-button>
-        </router-link>
-      </b-card-text>
+    <div class="difficulty-buttons">
+      <b-button-group>
+        <b-button variant="success" @click="switchDifficulty(0)">Easy</b-button>
+        <b-button variant="warning" @click="switchDifficulty(1)">Medium</b-button>
+        <b-button variant="danger" @click="switchDifficulty(2)">Hard</b-button>
+      </b-button-group>
+      <span id="difficulty">-- Switch Difficulty Level --</span>
+    </div>
+    <div>
+      <h5>Category - {{ category }} || Difficulty - {{ difficulty }}</h5>
+      <!-- Display appropriate message when defintion is not available to the selected word -->
+      <b-card title="Name a word for" body-class="text-center" header-tag="nav" class="card-top">
+        <b-card-text v-if="noData && !dataLoaded" class="hints">
+          Sorry, there is no defintion available for the selected word or category
+          <div class="spacer"></div>
+          <router-link to="/categories">
+            <b-button variant="danger" id="go-back">Try a different category</b-button>
+          </router-link>
+        </b-card-text>
 
-      <!-- Show a maximum of 3 definitions -->
-      <div class="hint-cards">
-        <b-card-text v-if="hintone" class="hints">
-          <span>- {{ hintone }}</span>
-        </b-card-text>
-        <b-card-text v-if="hinttwo" class="hints">
-          <span>- {{ hinttwo }}</span>
-        </b-card-text>
-        <b-card-text v-if="hintthree" class="hints">
-          <span>- {{ hintthree }}</span>
-        </b-card-text>
-      </div>
+        <!-- Show a maximum of 3 definitions -->
+        <div class="hint-cards">
+          <b-card-text v-if="hintone" class="hints">
+            <span>- {{ hintone }}</span>
+          </b-card-text>
+          <b-card-text v-if="hinttwo" class="hints">
+            <span>- {{ hinttwo }}</span>
+          </b-card-text>
+          <b-card-text v-if="hintthree" class="hints">
+            <span>- {{ hintthree }}</span>
+          </b-card-text>
+        </div>
 
-      <!-- Display a friendly message for wrong answers and show attempts left -->
-      <div v-if="hintone || hinttwo || hintthree">
-        <div v-if="showFailure" id="fail-alerter">
-          <div :class="alertFailure" role="alert">
-            Incorrect answer. You have
-            <span id="word-ans">{{ attemptLeft }}</span> more attempts and the
-            correct answer will be displayed
+        <!-- Display a friendly message for wrong answers and show attempts left -->
+        <div v-if="hintone || hinttwo || hintthree">
+          <div v-if="showFailure" id="fail-alerter">
+            <div :class="alertFailure" role="alert">
+              Incorrect answer. You have
+              <span id="word-ans">{{ attemptLeft }}</span> more attempts and the
+              correct answer will be displayed
+            </div>
+          </div>
+          <!-- Display a friendly message upon a correct answer -->
+          <div v-if="showSuccess" id="success-alerter">
+            <div :class="alertSuccess" role="alert">
+              Congratulations, your response was correct! Click
+              <span id="word-ans">Play Again</span> or choose a different category
+            </div>
+          </div>
+          <!-- Show correct answer after 3 attempts and disable submitting answer -->
+          <div v-if="countBiggerThanThree" id="answer-alerter">
+            <div :class="alertAnswer" role="alert">
+              You have attempted
+              <span id="word-ans">3</span> times. The correct answer is
+              <span id="word-ans">{{ randomWord }}</span>
+              Click
+              <span id="word-ans">Play Again</span> to continue playing
+            </div>
+          </div>
+          <!-- Buttons to submit answer and replay game with a different word -->
+          <b-form-input v-model="answer" placeholder="Enter your answer" class="col-md-4"></b-form-input>
+          <b-button variant="primary" id="sub-button" @click="submitAnswer">Submit Answer</b-button>
+          <div class="row">
+            <b-button variant="danger" class="again-button" @click="replayGame">Play Again</b-button>
           </div>
         </div>
-        <!-- Display a friendly message upon a correct answer -->
-        <div v-if="showSuccess" id="success-alerter">
-          <div :class="alertSuccess" role="alert">
-            Congratulations, your response was correct! Click
-            <span id="word-ans">Play Again</span> or choose a different category
-          </div>
-        </div>
-        <!-- Show correct answer after 3 attempts and disable submitting answer -->
-        <div v-if="countBiggerThanThree" id="answer-alerter">
-          <div :class="alertAnswer" role="alert">
-            You have attempted
-            <span id="word-ans">3</span> times. The correct answer is
-            <span id="word-ans">{{ randomWord }}</span>
-            Click
-            <span id="word-ans">Play Again</span> to continue playing
-          </div>
-        </div>
-        <!-- Buttons to submit answer and replay game with a different word -->
-        <b-form-input v-model="answer" placeholder="Enter your answer" class="col-md-4"></b-form-input>
-        <b-button variant="primary" id="sub-button" @click="submitAnswer">Submit Answer</b-button>
-        <div class="row">
-          <b-button variant="danger" class="again-button" @click="replayGame">Play Again</b-button>
-        </div>
-      </div>
-    </b-card>
+      </b-card>
+    </div>
   </div>
 </template>
 
@@ -80,6 +90,8 @@ export default {
     return {
       wordData: wordData.data,
       randomWord: "",
+      difficulty: "",
+      difficultyIndex: 0,
       category: this.$route.params.category,
       hintone: "",
       hinttwo: "",
@@ -96,18 +108,22 @@ export default {
       dataLoaded: false,
       noData: false,
       winCount: null,
-      lossCount: null
+      lossCount: null,
+      difficultyArray: ["Easy", "Medium", "Hard"]
     };
   },
   methods: {
     // Randomly picks a word populated in firebase
-    pickWord: function() {
+    pickWord: function(difficultyIndex) {
       for (let i = 0; i < this.wordData.words.length; i++) {
         if (
           this.wordData.words[i].category.trim().toLowerCase() ==
           this.category.trim().toLowerCase()
         ) {
-          var wordArray = this.wordData.words[i].wordList;
+          this.difficulty = this.difficultyArray[difficultyIndex];
+          var wordArray = this.wordData.words[i].wordList[
+            this.difficulty.toLowerCase()
+          ];
           let rand = Math.floor(Math.random() * wordArray.length);
           this.randomWord = wordArray[rand];
         }
@@ -152,7 +168,7 @@ export default {
       this.attemptCount = 0;
       this.attemptLeft = 3;
       this.countBiggerThanThree = false;
-      this.pickWord();
+      this.pickWord(this.difficultyIndex);
       this.populateHint();
       this.showSuccess = false;
       document.getElementById("sub-button").disabled = false;
@@ -176,11 +192,15 @@ export default {
         this.attemptLeft -= 1;
       }
       this.answer = "";
+    },
+    switchDifficulty: function(index) {
+      this.difficultyIndex = parseInt(index);
+      this.replayGame();
     }
   },
   //Uses created lifecycle hook to pull in the word and its definition
   created() {
-    this.pickWord();
+    this.pickWord(this.difficultyIndex);
     this.populateHint();
   },
   watch: {
@@ -217,9 +237,6 @@ export default {
 </script>
 
 <style scoped>
-[v-cloak] {
-  display: none !important;
-}
 .spacer {
   margin-left: 120px;
 }
@@ -238,9 +255,13 @@ input {
 .card-top {
   margin-bottom: 50px;
 }
-h3 {
+h5 {
   text-align: center;
   font-weight: bold;
+  border: 3px green solid;
+  width: 27%;
+  margin-left: 500px;
+  margin-top: 50px;
 }
 #sub-button {
   margin-left: 20px;
@@ -263,5 +284,13 @@ h3 {
   margin-left: 300px;
   margin-bottom: 50px;
   border: 5px grey solid;
+}
+.difficulty-buttons {
+  font-weight: bold;
+  text-decoration-color: aqua;
+}
+#difficulty {
+  border: 3px red dotted;
+  margin-left: 5px;
 }
 </style>
