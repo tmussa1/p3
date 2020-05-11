@@ -5,6 +5,8 @@
   https://stackoverflow.com/questions/45984086/vuelidate-validate-on-click-not-when-field-touched
   https://jsfiddle.net/07cmjweb/
   https://github.com/vuelidate/vuelidate/issues/403
+  https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
+  https://vuelidate.js.org/#sub-error-vs-any-error
 
 ## Pages summary
 
