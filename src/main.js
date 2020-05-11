@@ -10,6 +10,7 @@ import Game from './components/Game';
 import Stats from './components/Stats';
 import LogIn from './components/LogIn';
 import History from './components/History';
+import store from '../src/common/store';
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
@@ -30,6 +31,7 @@ const router = new VueRouter({
 });
 
 new Vue({
+  store: store,
   router: router,
   render: (h) => h(App),
 }).$mount('#app');
