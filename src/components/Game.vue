@@ -74,13 +74,26 @@
           </div>
           <!-- Buttons to submit answer and replay game with a different word -->
           <b-form-input
-            v-model="answer"
+            v-model="$v.answer.$model"
             placeholder="Enter your answer"
             class="col-md-4"
+            :class="{ 'form-input-error': $v.answer.$error }"
           ></b-form-input>
           <b-button variant="primary" id="sub-button" @click="submitAnswer"
             >Submit Answer</b-button
           >
+          <div
+            class="form-feedback-error"
+            v-if="$v.answer.$dirty && !$v.answer.required"
+          >
+            Answer is required
+          </div>
+          <div
+            class="form-feedback-error"
+            v-if="$v.answer.$dirty && !$v.answer.alpha"
+          >
+            Must enter alphabet characters
+          </div>
           <div class="row">
             <b-button variant="danger" class="again-button" @click="replayGame"
               >Play Again</b-button
@@ -103,6 +116,7 @@ import {
   getCounts,
 } from '../../public/callFirebase';
 import store from '../../src/common/store';
+import { required, alpha } from 'vuelidate/lib/validators';
 
 /* eslint-disable no-unused-vars */
 export default {
@@ -204,30 +218,35 @@ export default {
     //Submits an answer and updates the number of correct answers in firebase when user
     //gets it right
     submitAnswer: function() {
-      if (
-        this.randomWord.trim().toLowerCase() == this.answer.trim().toLowerCase()
-      ) {
-        this.showFailure = false;
-        this.showSuccess = true;
-        document.getElementById('sub-button').disabled = true;
-        this.winCount += 1;
-        let point =
-          this.difficultyIndex == 0 ? 1 : this.difficultyIndex == 1 ? 3 : 5;
-        let record = {
-          player: this.playerName,
-          word: this.randomWord,
-          response: this.answer,
-          points: point,
-          correctStatus: true,
-        };
-        this.$store.commit('updateResponseAndPoints', record);
-        updateWinCount(this.playerName, this.winCount);
-        this.answer = '';
-      } else {
-        this.showFailure = true;
-        this.showSuccess = false;
-        this.attemptCount += 1;
-        this.attemptLeft -= 1;
+      this.$v.$touch();
+
+      if (!this.$v.$invalid) {
+        if (
+          this.randomWord.trim().toLowerCase() ==
+          this.answer.trim().toLowerCase()
+        ) {
+          this.showFailure = false;
+          this.showSuccess = true;
+          document.getElementById('sub-button').disabled = true;
+          this.winCount += 1;
+          let point =
+            this.difficultyIndex == 0 ? 1 : this.difficultyIndex == 1 ? 3 : 5;
+          let record = {
+            player: this.playerName,
+            word: this.randomWord,
+            response: this.answer,
+            points: point,
+            correctStatus: true,
+          };
+          this.$store.commit('updateResponseAndPoints', record);
+          updateWinCount(this.playerName, this.winCount);
+          this.answer = '';
+        } else {
+          this.showFailure = true;
+          this.showSuccess = false;
+          this.attemptCount += 1;
+          this.attemptLeft -= 1;
+        }
       }
     },
     switchDifficulty: function(index) {
@@ -277,6 +296,12 @@ export default {
   },
   components: {
     NavBar,
+  },
+  validations: {
+    answer: {
+      required,
+      alpha,
+    },
   },
 };
 </script>
@@ -337,5 +362,8 @@ h5 {
 #difficulty {
   border: 3px red dotted;
   margin-left: 5px;
+}
+.form-feedback-error {
+  color: red;
 }
 </style>

@@ -11,10 +11,12 @@ import Stats from './components/Stats';
 import LogIn from './components/LogIn';
 import History from './components/History';
 import store from '../src/common/store';
+import Vuelidate from 'vuelidate';
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
+Vue.use(Vuelidate);
 
 const routes = [
   { path: '/categories', name: 'HomePage', props: true, component: HomePage },
