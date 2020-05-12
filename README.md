@@ -5,9 +5,9 @@
 
 ## Pages summary
 
-- **History Page** _This page is new to project 3. It displays correct answers and points assigned for all of the words that the user played. Points are assigned for a correct answer or three wrong attempts of guessing a word_
+- **History Page** _This page is new to project 3. It displays correct answers and points assigned for all of the words that the user played. Points are assigned for a correct answer or three wrong attempts of guessing a word. Total points based on difficulty are also calculated_
 
-_ **History Fallback Page** \_If the user doesn't have any record of answers, this page will be displayed and user will be navigated back to play the game_
+_ **History Fallback Page** \_If the user doesn't have any record of answers, this page will be displayed and user will be navigated back to play the game. Total points based on difficulty are also calculated_
 
 - **LogIn Page** _Takes the name of the player and date of birth. Does validation on name that it is not left blank and doesn't have any special characters. Does validation on age that user is at least 13. Stores the name of the player in local storge and invokes a method to store it in a database. Redirects user to HomePage after that_
 
@@ -102,7 +102,7 @@ The following references below have been used for a usccessful completion of the
 #### New items that were not part of project 2
 
 - Users can select a difficulty level from easy to hard. A word will be randomly selected on a choosen diffculty level. 1, 3 and 5 points will be assigned for answering easy, medium, hard questions respectively. 0 points will be assigned for a question after 3 unsuccessful attempts. The
-total points for a user will be calculated when navigating to the history page. In the history page, a correct answer for the questions played so far will be shown. If the user answered the question correctly, the history table will be marked and it will be marked for 3 wrong attempts. This feature is implemented using the VueX state management pattern. The entries for the table come from the state management store. Local storage is used to initially keep the name of the player in memory before persisting in database.
+total points for a user will be calculated when navigating to the history page. In the history page, a correct answer for the questions played so far will be shown. If the user answered the question correctly, the history table will be marked and it will be marked for 3 wrong attempts. This feature is implemented using the VueX state management pattern. The entries for the table come from the state management store. Local storage is used to initially keep the name of the player in memory before persisting in database. Total points based on difficulty are also calculated
 
 - Form validation is implemented in 2 pages, the log in page and the game page. In the log in page, name is a required field with no special characters and numericals. Users also must be at least 13 years of age which is calculated using the date of birth input field. In the game page, users can't submit a blank answer and also can't enter any special characters when playing the guessing game.
 
