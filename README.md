@@ -97,7 +97,7 @@ The following references below have been used for a usccessful completion of the
 
 ### Vocabulary Quiz
 
-### The application is a guessing game of words based on the definitions provided. The application is integrated with third party APIs to pull defintions and the user is randomly assigned a word to play with from a list in firebase based on a category of choice. The user can play a difficulty level of their choosing and users must be at least 13 years of age to be able to play the game.
+#### The application is a guessing game of words based on the definitions provided. The application is integrated with third party APIs to pull defintions and the user is randomly assigned a word to play with from a list in firebase based on a category of choice. The user can play a difficulty level of their choosing and users must be at least 13 years of age to be able to play the game.
 
 #### New items that were not part of project 2
 
