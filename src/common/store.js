@@ -3,6 +3,10 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+/**
+ * Preserves the history of correct and incorrect answers with their
+ * assigned points to be later shown by the history page
+ */
 export default new Vuex.Store({
   state: {
     history: [],

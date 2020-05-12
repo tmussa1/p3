@@ -149,6 +149,7 @@ export default {
   },
   methods: {
     // Randomly picks a word populated in firebase
+    // Sets the record of an initial player with 0 points in VueX
     pickWord: function(difficultyIndex) {
       for (let i = 0; i < this.wordData.words.length; i++) {
         if (
@@ -217,6 +218,8 @@ export default {
     },
     //Submits an answer and updates the number of correct answers in firebase when user
     //gets it right
+    //Assigns 1,3,5 points based on difficulty which will be committed in VueX
+    // the correct answer is also sent to VueX
     submitAnswer: function() {
       this.$v.$touch();
 
@@ -261,6 +264,7 @@ export default {
   },
   watch: {
     //After 3 attempts, update loss count
+    //Assigns 0 points for the user in VueX, the correct answer is also sent to VueX
     attemptCount: function() {
       if (this.attemptCount == 3) {
         this.countBiggerThanThree = true;

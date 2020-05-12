@@ -4,9 +4,11 @@
     <h3>
       <span id="history"> {{ playerName }}'s </span>History
     </h3>
+    <!-- render data records for players with history -->
     <div v-if="!noHistory">
       <b-table hover :items="items" class="col-md-6" id="table"></b-table>
     </div>
+    <!-- fallback message for players with no history -->
     <div v-if="noHistory" class="noHistory">
       <b-overlay rounded="sm" class="col-md-6">
         <b-card title="You have no history yet">
@@ -38,6 +40,7 @@ export default {
     };
   },
   methods: {
+    // Populates fields of history for a given user
     setItemValue: function() {
       for (let item1 in this.history) {
         let item = {
@@ -51,6 +54,7 @@ export default {
         this.noHistory = false;
       }
     },
+    //Go back to home page
     keepPlaying: function() {
       this.$router.push({
         name: 'HomePage',
@@ -58,13 +62,16 @@ export default {
     },
   },
   computed: {
+    //Retrieve player name from local storage
     playerName: function() {
       return localStorage.getItem('player');
     },
+    //Retrieve existing history from VueX
     history: function() {
       return this.$store.state.history;
     },
   },
+  //Populate values to render the table
   mounted() {
     this.setItemValue();
   },

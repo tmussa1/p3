@@ -1,4 +1,5 @@
-//List of words and there categories to be persisted in firebase
+//List of words and their categories to be persisted in firebase
+//words this time progress from easy to hard
 export const wordData = {
   data: {
     words: [
