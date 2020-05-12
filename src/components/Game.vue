@@ -5,9 +5,7 @@
     <div class="difficulty-buttons">
       <b-button-group>
         <b-button variant="success" @click="switchDifficulty(0)">Easy</b-button>
-        <b-button variant="warning" @click="switchDifficulty(1)"
-          >Medium</b-button
-        >
+        <b-button variant="warning" @click="switchDifficulty(1)">Medium</b-button>
         <b-button variant="danger" @click="switchDifficulty(2)">Hard</b-button>
       </b-button-group>
       <span id="difficulty">-- Switch Difficulty Level --</span>
@@ -15,20 +13,13 @@
     <div>
       <h5>Category - {{ category }} || Difficulty - {{ difficulty }}</h5>
       <!-- Display appropriate message when defintion is not available to the selected word -->
-      <b-card
-        title="Name a word for"
-        body-class="text-center"
-        header-tag="nav"
-        class="card-top"
-      >
+      <b-card title="Name a word for" body-class="text-center" header-tag="nav" class="card-top">
         <b-card-text v-if="noData && !dataLoaded" class="hints">
           Sorry, there is no defintion available for the selected word or
           category
           <div class="spacer"></div>
           <router-link to="/categories">
-            <b-button variant="danger" id="go-back"
-              >Try a different category</b-button
-            >
+            <b-button variant="danger" id="go-back">Try a different category</b-button>
           </router-link>
         </b-card-text>
 
@@ -79,25 +70,17 @@
             class="col-md-4"
             :class="{ 'form-input-error': $v.answer.$error }"
           ></b-form-input>
-          <b-button variant="primary" id="sub-button" @click="submitAnswer"
-            >Submit Answer</b-button
-          >
+          <b-button variant="primary" id="sub-button" @click="submitAnswer">Submit Answer</b-button>
           <div
             class="form-feedback-error"
             v-if="$v.answer.$dirty && !$v.answer.required"
-          >
-            Answer is required
-          </div>
+          >Answer is required</div>
           <div
             class="form-feedback-error"
             v-if="$v.answer.$dirty && !$v.answer.alpha"
-          >
-            Must enter alphabet characters
-          </div>
+          >Must enter alphabet characters</div>
           <div class="row">
-            <b-button variant="danger" class="again-button" @click="replayGame"
-              >Play Again</b-button
-            >
+            <b-button variant="danger" class="again-button" @click="replayGame">Play Again</b-button>
           </div>
         </div>
       </b-card>
@@ -106,36 +89,36 @@
 </template>
 
 <script>
-require('dotenv').config();
-import wordData from '../../public/wordData';
-import axios from 'axios';
-import NavBar from './NavBar.vue';
+require("dotenv").config();
+import wordData from "../../public/wordData";
+import axios from "axios";
+import NavBar from "./NavBar.vue";
 import {
   updateWinCount,
   updateLossCount,
-  getCounts,
-} from '../../public/callFirebase';
-import store from '../../src/common/store';
-import { required, alpha } from 'vuelidate/lib/validators';
+  getCounts
+} from "../../public/callFirebase";
+import store from "../../src/common/store";
+import { required, alpha } from "vuelidate/lib/validators";
 
 /* eslint-disable no-unused-vars */
 export default {
   data: function() {
     return {
       wordData: wordData.data,
-      randomWord: '',
-      difficulty: '',
+      randomWord: "",
+      difficulty: "",
       difficultyIndex: 0,
       category: this.$route.params.category,
-      hintone: '',
-      hinttwo: '',
-      hintthree: '',
-      answer: '',
+      hintone: "",
+      hinttwo: "",
+      hintthree: "",
+      answer: "",
       showFailure: false,
       showSuccess: false,
-      alertFailure: 'alert alert-danger col-md-8',
-      alertSuccess: 'alert alert-success col-md-8',
-      alertAnswer: 'alert alert-secondary col-md-8',
+      alertFailure: "alert alert-danger col-md-8",
+      alertSuccess: "alert alert-success col-md-8",
+      alertAnswer: "alert alert-secondary col-md-8",
       attemptCount: 0,
       attemptLeft: 3,
       countBiggerThanThree: false,
@@ -144,7 +127,7 @@ export default {
       winCount: null,
       lossCount: null,
       store: store,
-      difficultyArray: ['Easy', 'Medium', 'Hard'],
+      difficultyArray: ["Easy", "Medium", "Hard"]
     };
   },
   methods: {
@@ -165,40 +148,40 @@ export default {
           let record = {
             player: this.playerName,
             word: this.randomWord,
-            points: 0,
+            points: 0
           };
-          this.$store.commit('setWordToGuessAndPlayer', record);
+          this.$store.commit("setWordToGuessAndPlayer", record);
         }
       }
     },
     // Pulls definitions of those words from WordAPI
     populateHint: function() {
       axios({
-        method: 'GET',
-        url: 'https://wordsapiv1.p.rapidapi.com/words/' + this.randomWord,
+        method: "GET",
+        url: "https://wordsapiv1.p.rapidapi.com/words/" + this.randomWord,
         headers: {
-          'content-type': 'application/octet-stream',
-          'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
-          'x-rapidapi-key': process.env.VUE_APP_WORD_API_KEY,
-        },
+          "content-type": "application/octet-stream",
+          "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
+          "x-rapidapi-key": process.env.VUE_APP_WORD_API_KEY
+        }
       })
-        .then((response) => {
+        .then(response => {
           this.dataLoaded = true;
           this.noData = false;
           this.hintone =
             response.data.results[0] == null
-              ? ''
+              ? ""
               : response.data.results[0].definition;
           this.hinttwo =
             response.data.results[1] == null
-              ? ''
+              ? ""
               : response.data.results[1].definition;
           this.hintthree =
             response.data.results[2] == null
-              ? ''
+              ? ""
               : response.data.results[2].definition;
         })
-        .catch((error) => {
+        .catch(error => {
           this.dataLoaded = false;
           this.noData = true;
           console.log(error);
@@ -213,8 +196,8 @@ export default {
       this.pickWord(this.difficultyIndex);
       this.populateHint();
       this.showSuccess = false;
-      document.getElementById('sub-button').disabled = false;
-      this.answer = '';
+      document.getElementById("sub-button").disabled = false;
+      this.answer = "";
     },
     //Submits an answer and updates the number of correct answers in firebase when user
     //gets it right
@@ -230,7 +213,7 @@ export default {
         ) {
           this.showFailure = false;
           this.showSuccess = true;
-          document.getElementById('sub-button').disabled = true;
+          document.getElementById("sub-button").disabled = true;
           this.winCount += 1;
           let point =
             this.difficultyIndex == 0 ? 1 : this.difficultyIndex == 1 ? 3 : 5;
@@ -239,11 +222,11 @@ export default {
             word: this.randomWord,
             response: this.answer,
             points: point,
-            correctStatus: true,
+            correctStatus: true
           };
-          this.$store.commit('updateResponseAndPoints', record);
+          this.$store.commit("updateResponseAndPoints", record);
           updateWinCount(this.playerName, this.winCount);
-          this.answer = '';
+          this.answer = "";
         } else {
           this.showFailure = true;
           this.showSuccess = false;
@@ -255,7 +238,7 @@ export default {
     switchDifficulty: function(index) {
       this.difficultyIndex = parseInt(index);
       this.replayGame();
-    },
+    }
   },
   //Uses created lifecycle hook to pull in the word and its definition
   created() {
@@ -275,38 +258,38 @@ export default {
           word: this.randomWord,
           response: this.answer,
           points: 0,
-          correctStatus: false,
+          correctStatus: false
         };
-        this.$store.commit('updateResponseAndPoints', record);
-        document.getElementById('sub-button').disabled = true;
+        this.$store.commit("updateResponseAndPoints", record);
+        document.getElementById("sub-button").disabled = true;
         this.lossCount += 1;
         updateLossCount(this.playerName, this.lossCount);
       }
-    },
+    }
   },
   //Gets the player name from local storage
   computed: {
     playerName: function() {
-      return localStorage.getItem('player');
-    },
+      return localStorage.getItem("player");
+    }
   },
   //Get the counts of wins and losses for this user if they have played before
   //It will be zero if they never played before
   mounted() {
-    getCounts(this.playerName).then((response) => {
+    getCounts(this.playerName).then(response => {
       this.winCount = response.wins;
       this.lossCount = response.losses;
     });
   },
   components: {
-    NavBar,
+    NavBar
   },
   validations: {
     answer: {
       required,
-      alpha,
-    },
-  },
+      alpha
+    }
+  }
 };
 </script>
 

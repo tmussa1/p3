@@ -7,7 +7,7 @@
 
 - **History Page** _This page is new to project 3. It displays correct answers and points assigned for all of the words that the user played. Points are assigned for a correct answer or three wrong attempts of guessing a word_
 
-_ **History Fallback Page** _If the user doesn't have any record of answers, this page will be displayed and user will be navigated back to play the game_
+_ **History Fallback Page** \_If the user doesn't have any record of answers, this page will be displayed and user will be navigated back to play the game_
 
 - **LogIn Page** _Takes the name of the player and date of birth. Does validation on name that it is not left blank and doesn't have any special characters. Does validation on age that user is at least 13. Stores the name of the player in local storge and invokes a method to store it in a database. Redirects user to HomePage after that_
 
@@ -67,6 +67,10 @@ The following references below have been used for a usccessful completion of the
 
 [Bootstrap Vue](https://bootstrap-vue.js.org/docs)
 
+[Variable is declared but never read](https://stackoverflow.com/questions/50011443/tslint-how-to-disable-error-somevariable-is-declared-but-its-value-is-never-rea)
+
+[Calling a getter from another getter](https://stackoverflow.com/questions/46210109/how-do-i-call-a-getter-from-another-getter-in-vuex)
+
 [Chart Js tutorial](https://alligator.io/vuejs/vue-chart-js/)
 
 [Word API](https://www.wordsapi.com/)
@@ -93,7 +97,7 @@ The following references below have been used for a usccessful completion of the
 
 ### Vocabulary Quiz
 
-## The application is a guessing game of words based on the definitions provided. The application is integrated with third party APIs to pull defintions and the user is randomly assigned a word to play with from a list in firebase based on a category of choice. The user can play a difficulty level of their choosing and users must be at least 13 years of age to be able to play the game.
+### The application is a guessing game of words based on the definitions provided. The application is integrated with third party APIs to pull defintions and the user is randomly assigned a word to play with from a list in firebase based on a category of choice. The user can play a difficulty level of their choosing and users must be at least 13 years of age to be able to play the game.
 
 #### New items that were not part of project 2
 

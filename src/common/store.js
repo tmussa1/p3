@@ -10,6 +10,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     history: [],
+    total: 0,
   },
   mutations: {
     setWordToGuessAndPlayer(state, payload) {
@@ -28,6 +29,19 @@ export default new Vuex.Store({
           record.correctStatus = payload.correctStatus;
         }
       }
+    },
+  },
+  getters: {
+    getTotalForPlayer(state) {
+      return function(playerName) {
+        for (let index in state.history) {
+          let record = state.history[index];
+          if (record.player == playerName) {
+            state.total = state.total + parseInt(record.points);
+          }
+        }
+        return state.total;
+      };
     },
   },
 });
