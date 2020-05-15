@@ -11,7 +11,7 @@
         >
           <b-row class="card-indv">
             <b-card bg-variant="success" text-variant="black" class="text-center">
-              <b-card-text>Category - {{ word.category }}</b-card-text>
+              <b-card-text data-test="category-name">Category - {{ word.category }}</b-card-text>
               <router-link
                 :to="{
                   name: 'Game',
@@ -20,7 +20,7 @@
                   },
                 }"
               >
-                <b-button variant="primary">Let's play</b-button>
+                <b-button variant="primary" data-test="category-button">Let's play</b-button>
               </router-link>
             </b-card>
           </b-row>
@@ -38,7 +38,7 @@ import NavBar from "./NavBar.vue";
 export default {
   data: function() {
     return {
-      // The list of categories are persisted in firebase and there is a method to seed 
+      // The list of categories are persisted in firebase and there is a method to seed
       // them in the app
       wordData: wordData.data
     };

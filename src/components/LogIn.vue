@@ -11,6 +11,7 @@
     <div class="col-md-4" id="name-dob">
       <label for="player-name">What's your name?</label>
       <b-form-input
+        data-test="enter-name"
         v-model="$v.playername.$model"
         id="player-name"
         placeholder="Enter your name"
@@ -20,15 +21,11 @@
       <div
         class="form-feedback-error"
         v-if="$v.playername.$dirty && !$v.playername.required"
-      >
-        Player name is required
-      </div>
+      >Player name is required</div>
       <div
         class="form-feedback-error"
         v-if="$v.playername.$dirty && !$v.playername.alpha"
-      >
-        Must enter alphabet characters
-      </div>
+      >Must enter alphabet characters</div>
       <label for="datepicker-placeholder">What's your birthday?</label>
       <b-form-datepicker
         v-model="$v.birthdate.$model"
@@ -36,36 +33,32 @@
         placeholder="Choose a date"
         local="en"
         :class="{ 'form-input-error': $v.birthdate.$error }"
+        data-test="enter-dob"
       ></b-form-datepicker>
       <div
         class="form-feedback-error"
         v-if="$v.birthdate.$dirty && !$v.birthdate.required"
-      >
-        Birth date is required
-      </div>
+      >Birth date is required</div>
       <div
         class="form-feedback-error"
         v-if="$v.birthdate.$dirty && !$v.birthdate.adultValidation"
-      >
-        You must be at least 13 years of age
-      </div>
+      >You must be at least 13 years of age</div>
       <b-button variant="primary" @click.prevent="savePlayer" id="save-player"
-        >Let's Play</b-button
-      >
+      data-test="register">Let's Play</b-button>
     </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable no-unused-vars */
-import { saveUser } from '../../public/callFirebase';
-import { alpha, required } from 'vuelidate/lib/validators';
+import { saveUser } from "../../public/callFirebase";
+import { alpha, required } from "vuelidate/lib/validators";
 
 export default {
   data: function() {
     return {
-      playername: '',
-      birthdate: '',
+      playername: "",
+      birthdate: ""
     };
   },
   methods: {
@@ -76,26 +69,26 @@ export default {
 
       if (!this.$v.$invalid) {
         saveUser(this.playername, this.birthdate);
-        localStorage.setItem('player', this.playername);
+        localStorage.setItem("player", this.playername);
         this.$router.push({
-          name: 'HomePage',
+          name: "HomePage"
         });
       }
-    },
+    }
   },
   validations: {
     playername: {
       required,
-      alpha,
+      alpha
     },
     birthdate: {
       required,
       adultValidation(date) {
-        let dateArr = date.split('-');
+        let dateArr = date.split("-");
         return parseInt(dateArr[0]) <= 2007;
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 

@@ -6,7 +6,7 @@
       <b-button-group>
         <b-button variant="success" @click="switchDifficulty(0)">Easy</b-button>
         <b-button variant="warning" @click="switchDifficulty(1)">Medium</b-button>
-        <b-button variant="danger" @click="switchDifficulty(2)">Hard</b-button>
+        <b-button variant="danger" @click="switchDifficulty(2)" data-test="difficulty-hard">Hard</b-button>
       </b-button-group>
       <span id="difficulty">-- Switch Difficulty Level --</span>
     </div>
@@ -69,8 +69,14 @@
             placeholder="Enter your answer"
             class="col-md-4"
             :class="{ 'form-input-error': $v.answer.$error }"
+            data-test="enter-answer"
           ></b-form-input>
-          <b-button variant="primary" id="sub-button" @click="submitAnswer">Submit Answer</b-button>
+          <b-button
+            variant="primary"
+            id="sub-button"
+            @click="submitAnswer"
+            data-test="enter-button"
+          >Submit Answer</b-button>
           <div
             class="form-feedback-error"
             v-if="$v.answer.$dirty && !$v.answer.required"
@@ -80,7 +86,8 @@
             v-if="$v.answer.$dirty && !$v.answer.alpha"
           >Must enter alphabet characters</div>
           <div class="row">
-            <b-button variant="danger" class="again-button" @click="replayGame">Play Again</b-button>
+            <b-button variant="danger" class="again-button" @click="replayGame"
+            data-test="play-again-button">Play Again</b-button>
           </div>
         </div>
       </b-card>
