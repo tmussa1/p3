@@ -25,9 +25,16 @@
               size="sm"
               class="mr-sm-2"
               placeholder="Filter categories"
+              data-test="search-category"
               v-model="searchWord"
             ></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit" @click="searchCategory">Search</b-button>
+            <b-button
+              size="sm"
+              class="my-2 my-sm-0"
+              type="submit"
+              @click="searchCategory"
+              data-test="search-category-button"
+            >Search</b-button>
           </b-nav-form>
         </b-navbar-nav>
       </b-collapse>

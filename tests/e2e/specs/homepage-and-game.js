@@ -15,6 +15,12 @@ describe('Shows categories and selects a word to play', () => {
     });
   });
 
+  it('Search a category', () => {
+    let categories = ['Chicken', 'Texas Life', 'Arts'];
+    cy.get('[data-test="search-category"]').type(categories[0]);
+    cy.get('[data-test="search-category-button"]').click();
+  });
+
   it('Switch difficulty level', () => {
     cy.get('[data-test="difficulty-hard"]').click();
   });
