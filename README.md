@@ -55,6 +55,12 @@ _ **History Fallback Page** \_If the user doesn't have any record of answers, th
 
 The following references below have been used for a usccessful completion of the project
 
+[how to mock bootstrap vue elements](https://stackoverflow.com/questions/56499822/getting-vue-warn-unknown-custom-element-b-modal-even-though-bootstrap-vue)
+
+[How to assert with Chai](https://stackoverflow.com/questions/49648365/typeerror-expect-tobea-is-not-a-function)
+
+[Unit testing with Karma and Mocha](https://alligator.io/vuejs/unit-testing-karma-mocha/)
+
 [Validate form on a click](https://stackoverflow.com/questions/45984086/vuelidate-validate-on-click-not-when-field-touched)
 
 [Custom Validation](https://jsfiddle.net/07cmjweb/)
